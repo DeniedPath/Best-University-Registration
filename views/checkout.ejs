@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <% layout('main') -%>
+
+<h1 class="text-center my-4">Checkout</h1>
+<form action="/checkout" method="POST">
+  <div class="mb-3">
+    <label for="cardNumber" class="form-label">Card Number</label>
+    <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+  </div>
+  <div class="mb-3">
+    <label for="expiry" class="form-label">Expiry Date</label>
+    <input type="text" class="form-control" id="expiry" name="expiry" placeholder="MM/YY" required>
+  </div>
+  <div class="mb-3">
+    <label for="cvv" class="form-label">CVV</label>
+    <input type="text" class="form-control" id="cvv" name="cvv" required>
+  </div>
+  <button type="submit" class="btn btn-success w-100">Pay $200</button>
+</form>
+
+</body>
+</html>

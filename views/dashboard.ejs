@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <% layout('main') -%>
+
+<h1 class="text-center my-4">Dashboard</h1>
+<div class="row">
+  <!-- Metrics Cards -->
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Total Courses</h5>
+        <p class="card-text fs-4">5</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Completed Courses</h5>
+        <p class="card-text fs-4">3</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Pending Payments</h5>
+        <p class="card-text fs-4">$200</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table Section -->
+<h2 class="mt-5">Enrolled Courses</h2>
+<table class="table table-striped mt-3">
+  <thead>
+    <tr>
+      <th>Course Name</th>
+      <th>Instructor</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Introduction to Programming</td>
+      <td>Dr. Smith</td>
+      <td>Completed</td>
+    </tr>
+    <tr>
+      <td>Web Development</td>
+      <td>Prof. Johnson</td>
+      <td>Ongoing</td>
+    </tr>
+    <tr>
+      <td>Data Science</td>
+      <td>Dr. Allen</td>
+      <td>Not Started</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
