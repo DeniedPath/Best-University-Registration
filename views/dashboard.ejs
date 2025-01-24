@@ -3,68 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-  <% layout('main') -%>
+    <div class="dashboard-container">
+        <!-- Navigation Header -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="brand">GreenField University</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="What do you want to learn?">
+                </div>
+            </div>
+            <div class="nav-right">
+                <a href="/course">My Courses</a>
+                <a href="#purchases">Purchases</a>
+                <a href="#help">Help Center</a>
+                <div class="user-profile">
+                    <img src="/path/to/profile-image.jpg" alt="Profile" class="profile-img">
+                    <span class="username">Name</span>
+                </div>
+            </div>
+        </nav>
 
-<h1 class="text-center my-4">Dashboard</h1>
-<div class="row">
-  <!-- Metrics Cards -->
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5 class="card-title">Total Courses</h5>
-        <p class="card-text fs-4">5</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5 class="card-title">Completed Courses</h5>
-        <p class="card-text fs-4">3</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5 class="card-title">Pending Payments</h5>
-        <p class="card-text fs-4">$200</p>
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="menu-item active">Explore</div>
+                <div class="course-list">
+                    <div class="menu-item">Course 1</div>
+                    <div class="menu-item">Course 2</div>
+                    <div class="menu-item">Course 3</div>
+                    <div class="menu-item">Course 4</div>
+                    <div class="menu-item">Course 5</div>
+                    <div class="menu-item">Course 6</div>
+                </div>
+                <div class="menu-item">Explore All</div>
+            </div>
 
-<!-- Table Section -->
-<h2 class="mt-5">Enrolled Courses</h2>
-<table class="table table-striped mt-3">
-  <thead>
-    <tr>
-      <th>Course Name</th>
-      <th>Instructor</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Introduction to Programming</td>
-      <td>Dr. Smith</td>
-      <td>Completed</td>
-    </tr>
-    <tr>
-      <td>Web Development</td>
-      <td>Prof. Johnson</td>
-      <td>Ongoing</td>
-    </tr>
-    <tr>
-      <td>Data Science</td>
-      <td>Dr. Allen</td>
-      <td>Not Started</td>
-    </tr>
-  </tbody>
-</table>
+            <!-- Course Content -->
+            <div class="content-area">
+                <!-- Course Preview Cards -->
+                <div class="course-previews">
+                    <div class="preview-card">
+                        <div class="preview-image">Image Here</div>
+                        <div class="preview-info">
+                            <h3>Heading</h3>
+                            <p>Short text describing the course</p>
+                        </div>
+                    </div>
+                    <div class="preview-card">
+                        <div class="preview-image">Image Here</div>
+                        <div class="preview-info">
+                            <h3>Heading</h3>
+                            <p>Short text describing the course</p>
+                        </div>
+                    </div>
+                    <div class="preview-card">
+                        <div class="preview-image">Image Here</div>
+                        <div class="preview-info">
+                            <h3>Heading</h3>
+                            <p>Short text describing the course</p>
+                        </div>
+                    </div>
+                    <!-- Repeat preview cards as needed -->
+                </div>
 
+                <!-- Featured Course -->
+                <div class="featured-course">
+                    <div class="course-image">Image Here</div>
+                    <div class="course-info">
+                        <div class="rating">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-text">5.0</span>
+                            <span class="rating-count">5,000 ratings</span>
+                        </div>
+                        <h2>Course Name</h2>
+                        <p>Short Description of course</p>
+                        <form action="/course" method="GET">
+                            <button type="submit" class="enroll-btn">Enroll</button>
+                          </form>
+                        <p class="enroll-text">Enroll to start your Course today!</p>
+                        
+                        <div class="course-features">
+                            <div class="feature">
+                                <span class="icon">🌐</span>
+                                <div class="feature-text">
+                                    <strong>100% Online Course</strong>
+                                    <p>Start now & learn at your own schedule</p>
+                                </div>
+                            </div>
+                            <!-- Repeat for other features -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

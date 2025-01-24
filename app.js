@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const connectDB = require('./config/database');
-const expressLayouts = require('express-ejs-layouts');
 const port = 3000;
 
 // Middleware
@@ -12,8 +11,7 @@ app.use(express.static('public'));
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.use(expressLayouts);
-app.set('layout', './layouts/main');
+
 
 // Routes
 const userRoutes = require('./routes/userRoutes');

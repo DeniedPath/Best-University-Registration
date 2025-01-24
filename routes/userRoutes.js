@@ -1,61 +1,46 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const User = require('../models/user');
+const userController = require('../controllers/userController');
 
+// Redirect root URL to login page
 router.get('/', (req, res) => {
-  res.render('login', { title: 'Login' });
-});
-
-router.get('/login', (req, res) => {
-  res.render('login', { title: 'Login' });
-});
-
-router.get('/register', (req, res) => {
-  res.render('register', { title: 'Register' });
-});
-
-router.post('/login', async (req, res) => {
-  // Implement login logic here
-  res.redirect('/dashboard');
-});
-
-router.post('/register', async (req, res) => {
-  const { fullName, email, password, role } = req.body;
-
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).send('Email is already registered.');
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ fullName, email, password: hashedPassword, role });
-    await newUser.save();
-
-    res.redirect('/login');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Server error');
-  }
-});
-
-router.get('/dashboard', (req, res) => {
-  res.render('dashboard', { title: 'Dashboard' });
-});
-
-router.get('/checkout', (req, res) => {
-  res.render('checkout', { title: 'Checkout' });
-});
-
-router.post('/checkout', (req, res) => {
-  // Implement payment processing logic here
-  res.redirect('/dashboard');
-});
-
-router.get('/logout', (req, res) => {
-  // Implement logout logic here
   res.redirect('/login');
 });
+
+// Route to render the admin page
+router.get('/admin', (req, res) => {
+  res.render('Staff&Faculty/admin', { title: 'Admin Dashboard' });
+});
+
+// Route to render the teacher page
+router.get('/teacher', (req, res) => {
+  res.render('Staff&Faculty/teacher', { title: 'Teacher Dashboard' });
+});
+
+// Route to render the course page
+router.get('/course', (req, res) => {
+  res.render('course', { title: 'Course Enrollment' });
+});
+
+// Route to render the login page
+router.get('/login', userController.renderLoginPage);
+
+// Route to render the registration page
+router.get('/register', userController.renderRegisterPage);
+
+// Route to handle login form submission
+router.post('/login', userController.login);
+
+// Route to handle registration form submission
+router.post('/register', userController.register);
+
+// Route to render the dashboard page
+router.get('/dashboard', userController.renderDashboardPage);
+
+// Route to render the profile page
+router.get('/profile', userController.renderProfilePage);
+
+// Route to render the settings page
+router.get('/settings', userController.renderSettingsPage);
 
 module.exports = router;

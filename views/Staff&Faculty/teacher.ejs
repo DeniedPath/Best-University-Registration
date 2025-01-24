@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Portal</title>
+    <link rel="stylesheet" href="/css/faculty.css">
+</head>
+<body>
+    <div class="portal-container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="brand">Brandname</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="What do you want to find?">
+                </div>
+            </div>
+            <div class="nav-right">
+                <a href="#courses">My courses</a>
+                <a href="#purchases">Purchases</a>
+                <a href="#help">Help Center</a>
+                <div class="user-profile">
+                    <img src="/path/to/profile.jpg" alt="Profile" class="profile-img">
+                    <span>Name ▼</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="class-selector">
+                    <span>Class A</span>
+                    <div class="student-count">
+                        <span class="student-icons">👤👤👤👤</span>
+                        <span class="count">+8</span>
+                    </div>
+                </div>
+                <div class="alerts">
+                    <span class="alert-icon">🔔</span>
+                    <span class="alert-count">2</span>
+                </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <div class="metric-title">Overall Class Score</div>
+                    <div class="circular-progress">
+                        <div class="progress-value">40%</div>
+                    </div>
+                    <div class="metric-subtitle">Grade Average: 50%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-title">Work Assigned</div>
+                    <div class="circular-progress">
+                        <div class="progress-value">40%</div>
+                    </div>
+                    <div class="metric-subtitle">Grade Average: 50%</div>
+                </div>
+
+                <div class="student-cards">
+                    <!-- Student profile cards here -->
+                </div>
+            </div>
+
+            <!-- Student Proficiency Table -->
+            <div class="proficiency-section">
+                <h2>Student Proficiency</h2>
+                <table class="proficiency-table">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Work Completed</th>
+                            <th>Average Score</th>
+                            <th>Needs attention</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="student-name">
+                                    <span class="profile-icon">👤</span>
+                                    Name
+                                </div>
+                            </td>
+                            <td>33/36</td>
+                            <td>
+                                <div class="score-bar">
+                                    <div class="score-fill" style="width: 23%"></div>
+                                    <span>23</span>
+                                </div>
+                            </td>
+                            <td><div class="attention-badge">45</div></td>
+                            <td><div class="action-badge">5</div></td>
+                        </tr>
+                        <!-- Repeat for other students -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+/* public/css/dashboard.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.dashboard-container {
+    min-height: 100vh;
+}
+
+/* Navigation Styles */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #111111;
+    border-bottom: 1px solid #333;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.search-bar input {
+    background-color: #222;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    color: white;
+    width: 300px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-right a {
+    color: white;
+    text-decoration: none;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.profile-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+/* Main Content Layout */
+.main-content {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 200px;
+}
+
+.menu-item {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.menu-item:hover {
+    background-color: #222;
+}
+
+.menu-item.active {
+    background-color: #333;
+}
+
+/* Course Content Styles */
+.content-area {
+    flex: 1;
+}
+
+.course-previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.preview-card {
+    background-color: #222;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.preview-image {
+    height: 150px;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.featured-course {
+    background-color: #222;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.enroll-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.course-features {
+    margin-top: 2rem;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.rating {
+    color: #ff9800;
+    margin-bottom: 1rem;
+}
