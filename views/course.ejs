@@ -1,27 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Registration</title>
-    <link rel="stylesheet" href="/css/course.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Available Courses</title>
+  <link rel="stylesheet" href="/css/course.css">
 </head>
 <body>
-    <div class="course-popup">
-        <div class="popup-content">
-            <button class="close-btn">×</button>
-            
-            <div class="course-header">
-                <h1>COURSE NAME</h1>
-            </div>
-
-            <div class="course-body">
-                <p class="course-message">Start Learning This course.</p>
-                
-                <button class="continue-btn">CONTINUE</button>
-                
-            </div>
+  <header>
+    <nav class="top-nav">
+      <div class="nav-left">
+        <div class="brand">GreenField University</div>
+        <div class="search-bar">
+          <form action="/courses/search" method="GET">
+            <input type="text" name="query" placeholder="Search for courses...">
+            <button type="submit">Search</button>
+          </form>
         </div>
+      </div>
+      <div class="nav-right">
+        <a href="/course">My Courses</a>
+        <a href="#purchases">Purchases</a>
+        <a href="#help">Help Center</a>
+        <div class="user-profile">
+          <img src="/images/LetHimCOOK!.png" alt="Profile" class="profile-img">
+          <div class="dropdown">
+            <button class="dropbtn">
+              <span class="username"><%= user.fullName %></span>
+              <span class="arrow">˅</span>
+            </button>
+            <div class="dropdown-content">
+              <a href="/settings">Settings</a>
+              <a href="/profile">Profile</a>
+              <a href="/logout">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="courses-container">
+    <h1>Available Courses</h1>
+    <div class="course-grid">
+      <% if (courses.length > 0) { %>
+        <% courses.forEach(course => { %>
+          <div class="course-card">
+            <h2><%= course.name %></h2>
+            <p><%= course.description %></p>
+            <p><strong>Credits:</strong> <%= course.credits %></p>
+            <a href="/courses/enroll/<%= course._id %>" class="enroll-btn">Enroll Now</a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No courses available at the moment.</p>
+      <% } %>
     </div>
+  </div>
 </body>
 </html>

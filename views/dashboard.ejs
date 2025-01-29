@@ -5,102 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/dropdown.css">
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Navigation Header -->
+        <!-- Top Navigation -->
         <nav class="top-nav">
-            <div class="nav-left">
-                <div class="brand">GreenField University</div>
-                <div class="search-bar">
-                    <input type="text" placeholder="What do you want to learn?">
-                </div>
+          <div class="nav-left">
+            <div class="brand">GreenField University</div>
+            <div class="search-bar">
+              <form action="/courses/search" method="GET">
+                <input type="text" name="query" placeholder="Search for courses...">
+                <button type="submit">Search</button>
+              </form>
             </div>
-            <div class="nav-right">
-                <a href="/course">My Courses</a>
-                <a href="#purchases">Purchases</a>
-                <a href="#help">Help Center</a>
-                <div class="user-profile">
-                    <img src="/path/to/profile-image.jpg" alt="Profile" class="profile-img">
-                    <span class="username">Name</span>
+          </div>
+          <div class="nav-right">
+            <a href="/course">My Courses</a>
+            <a href="#purchases">Purchases</a>
+            <a href="#help">Help Center</a>
+            <div class="user-profile">
+              <img src="/images/LetHimCOOK!.png" alt="Profile" class="profile-img">
+              <div class="dropdown">
+                <button class="dropbtn">
+                  <span class="username"><%= user.fullName %></span>
+                  <span class="arrow">˅</span>
+                </button>
+                <div class="dropdown-content">
+                  <a href="/settings">Settings</a>
+                  <a href="/profile">Profile</a>
+                  <a href="/logout">Logout</a>
                 </div>
+              </div>
             </div>
+          </div>
         </nav>
-
+      
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="menu-item active">Explore</div>
-                <div class="course-list">
-                    <div class="menu-item">Course 1</div>
-                    <div class="menu-item">Course 2</div>
-                    <div class="menu-item">Course 3</div>
-                    <div class="menu-item">Course 4</div>
-                    <div class="menu-item">Course 5</div>
-                    <div class="menu-item">Course 6</div>
+          <!-- Sidebar -->
+          <div class="sidebar">
+            <div class="menu-item active">Explore</div>
+            <div class="course-list">
+              <% courses.forEach(course => { %>
+                <div class="menu-item">
+                  <a href="/courses/<%= course._id %>"><%= course.name %></a>
                 </div>
-                <div class="menu-item">Explore All</div>
+              <% }) %>
             </div>
-
-            <!-- Course Content -->
-            <div class="content-area">
-                <!-- Course Preview Cards -->
-                <div class="course-previews">
-                    <div class="preview-card">
-                        <div class="preview-image">Image Here</div>
-                        <div class="preview-info">
-                            <h3>Heading</h3>
-                            <p>Short text describing the course</p>
-                        </div>
+            <div class="menu-item">Explore All</div>
+          </div>
+      
+          <!-- Content Area -->
+          <div class="content-area">
+            <!-- Enrolled Courses -->
+            <div class="enrolled-courses">
+              <h2>My Enrolled Courses</h2>
+              <% if (user.enrolledCourses.length > 0) { %>
+                <div class="course-grid">
+                  <% user.enrolledCourses.forEach(course => { %>
+                    <div class="course-card">
+                      <h3><%= course.name %></h3>
+                      <p><%= course.description %></p>
+                      <p><strong>Credits:</strong> <%= course.credits %></p>
                     </div>
-                    <div class="preview-card">
-                        <div class="preview-image">Image Here</div>
-                        <div class="preview-info">
-                            <h3>Heading</h3>
-                            <p>Short text describing the course</p>
-                        </div>
-                    </div>
-                    <div class="preview-card">
-                        <div class="preview-image">Image Here</div>
-                        <div class="preview-info">
-                            <h3>Heading</h3>
-                            <p>Short text describing the course</p>
-                        </div>
-                    </div>
-                    <!-- Repeat preview cards as needed -->
+                  <% }) %>
                 </div>
-
-                <!-- Featured Course -->
-                <div class="featured-course">
-                    <div class="course-image">Image Here</div>
-                    <div class="course-info">
-                        <div class="rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-text">5.0</span>
-                            <span class="rating-count">5,000 ratings</span>
-                        </div>
-                        <h2>Course Name</h2>
-                        <p>Short Description of course</p>
-                        <form action="/course" method="GET">
-                            <button type="submit" class="enroll-btn">Enroll</button>
-                          </form>
-                        <p class="enroll-text">Enroll to start your Course today!</p>
-                        
-                        <div class="course-features">
-                            <div class="feature">
-                                <span class="icon">🌐</span>
-                                <div class="feature-text">
-                                    <strong>100% Online Course</strong>
-                                    <p>Start now & learn at your own schedule</p>
-                                </div>
-                            </div>
-                            <!-- Repeat for other features -->
-                        </div>
-                    </div>
-                </div>
+              <% } else { %>
+                <p>You are not enrolled in any courses yet. <a href="/courses">Explore courses</a>.</p>
+              <% } %>
             </div>
+      
+            <!-- Notifications -->
+            <div class="notifications">
+              <h2>Notifications</h2>
+              <div class="notification-list">
+                <div class="notification-item">
+                  <p>Assignment due for <strong>Course 1</strong> on 12/05/2026.</p>
+                </div>
+                <div class="notification-item">
+                  <p>New course <strong>Course 2</strong> is now available.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
 </body>
 </html>

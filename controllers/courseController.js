@@ -1,10 +1,34 @@
-const Course = require('../models/course');
+const Course = require('../models/Course');
 
-// Render the page to list all courses
+// Render the courses page
 exports.listCourses = async (req, res) => {
   try {
     const courses = await Course.find();
-    res.render('dashboard', { title: 'Dashboard', courses });
+    res.render('course', { title: 'Available Courses', courses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+// Handle course enrollment
+exports.enrollCourse = async (req, res) => {
+  const courseId = req.params.id;
+  const userId = req.session.userId;
+
+  try {
+    const user = await User.findById(userId);
+    const course = await Course.findById(courseId);
+
+    if (!user || !course) {
+      return res.status(404).send('User or course not found.');
+    }
+
+    // Add course to user's enrolled courses
+    user.enrolledCourses.push(courseId);
+    await user.save();
+
+    res.redirect('/dashboard');
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
@@ -29,12 +53,6 @@ exports.listCourses = async (req, res) => {
     }
   };
 
-  // Handle course enrollment
-exports.enrollCourse = async (req, res) => {
-    const courseId = req.params.id;
-    // Implement enrollment logic here
-    res.send(`Enrolled in course with ID: ${courseId}`);
-  };
 
 // Render the page to edit a course
 exports.renderEditCoursePage = async (req, res) => {
@@ -64,6 +82,16 @@ exports.deleteCourse = async (req, res) => {
   try {
     await Course.findByIdAndDelete(req.params.id);
     res.redirect('/courses');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.renderDashboardPage = async (req, res) => {
+  try {
+    const courses = await Course.find();
+    res.render('dashboard', { title: 'Dashboard', courses });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');

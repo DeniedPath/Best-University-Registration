@@ -1,71 +1,72 @@
-/* public/css/course.css */
 body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #f4f4f4;
+  }
+  
+  header {
+    background-color: #333;
+    color: white;
+    padding: 1rem 0;
+  }
+  
+  header nav ul {
+    list-style: none;
     display: flex;
-    align-items: center;
     justify-content: center;
-    min-height: 100vh;
-}
-
-.course-popup {
-    background-color: #1a1a1a;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-}
-
-.popup-content {
-    padding: 2rem;
-    text-align: center;
-}
-
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 24px;
-    cursor: pointer;
+    margin: 0;
     padding: 0;
-}
-
-.course-header h1 {
-    color: #ffffff;
-    font-size: 24px;
-    margin-bottom: 40px;
-}
-
-.course-message {
-    color: #ffffff;
-    font-size: 18px;
-    margin-bottom: 40px;
-}
-
-.continue-btn {
-    background-color: transparent;
-    color: #ffffff;
-    border: 1px solid #ffffff;
-    padding: 12px 40px;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.continue-btn:hover {
-    background-color: #ffffff;
-    color: #1a1a1a;
-}
-
-.cost-note {
-    color: #666666;
-    font-size: 12px;
-    margin-top: 20px;
-    text-align: right;
-}
+  }
+  
+  header nav ul li {
+    margin: 0 1rem;
+  }
+  
+  header nav ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .courses-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  .course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  
+  .course-card {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .course-card h2 {
+    margin-top: 0;
+  }
+  
+  .enroll-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .enroll-btn:hover {
+    background-color: #0056b3;
+  }

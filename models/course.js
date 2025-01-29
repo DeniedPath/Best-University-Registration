@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// creates course schema
+
 const courseSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -13,6 +13,7 @@ const courseSchema = new mongoose.Schema({
     type: Number,
     required: true
   }
+  // Add other fields as necessary
 });
 
-module.exports = mongoose.model('Course', courseSchema);
+module.exports = mongoose.models.Course || mongoose.model('Course', courseSchema);
