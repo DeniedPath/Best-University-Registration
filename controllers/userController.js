@@ -23,33 +23,31 @@ exports.renderRegisterPage = (req, res) => {
   res.render('register', { title: 'Register' });
 };
 
-
 // Handle login form submission
 exports.login = async (req, res) => {
   const { email, password } = req.body;
+
   try {
-    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).send('Invalid email or password.');
+      console.log('User not found');
+      return res.status(401).send('Invalid email or password');
     }
 
-    // Compare passwords
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(400).send('Invalid email or password.');
+      console.log('Password does not match');
+      return res.status(401).send('Invalid email or password');
     }
 
-    // Store user ID and role in session for session management
     req.session.userId = user._id;
-    req.session.role = user.role;
 
-    // Redirect based on role
+    // Redirect based on user role
     if (user.role === 'admin') {
       res.redirect('/admin');
-    } else if (user.role === 'faculty') {
+    } else if (user.role === 'teacher') {
       res.redirect('/teacher');
-    } else {
+    } else if (user.role === 'student') {
       res.redirect('/dashboard');
     }
   } catch (error) {
@@ -58,29 +56,19 @@ exports.login = async (req, res) => {
   }
 };
 
-
-
-
 // Handle registration form submission
 exports.register = async (req, res) => {
-  const { fullName, email, password, role } = req.body;
+  const { name, email, password, role } = req.body;
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).send('Email is already registered.');
-    }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ fullName, email, password: hashedPassword, role });
-    await newUser.save();
+    const user = new User({ name, email, password: hashedPassword, role });
+    await user.save();
     res.redirect('/login');
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
   }
 };
-
-
-
 
 // Render the dashboard page
 // controllers/userController.js
@@ -122,13 +110,14 @@ exports.renderSettingsPage = (req, res) => {
   }
   res.render('settings', { user });
 };
-// controllers/userController.js
+
+// Update user settings
 exports.updateSettings = async (req, res) => {
-  const { fullName, email } = req.body;
+  const { name, email, phone, links, skills } = req.body;
   const userId = req.session.userId;
 
   try {
-    const user = await User.findByIdAndUpdate(userId, { fullName, email }, { new: true });
+    const user = await User.findByIdAndUpdate(userId, { name, email, phone, links, skills }, { new: true });
     res.redirect('/profile');
   } catch (error) {
     console.error(error);
@@ -136,10 +125,21 @@ exports.updateSettings = async (req, res) => {
   }
 };
 
+// Get user settings
 exports.getSettings = (req, res) => {
-  const user = req.session.user;
+  const user = req.user;
   if (!user) {
     return res.status(401).send('User not authenticated');
   }
   res.render('settings', { user });
+};
+
+exports.logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Server error');
+    }
+    res.redirect('/login');
+  });
 };

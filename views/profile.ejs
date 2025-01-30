@@ -4,23 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
-    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" href="/css/profile.css"> <!-- Link to your CSS file -->
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h2><%= user.name %></h2>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <p><strong>Email:</strong> <%= user.email %></p>
-                        <p><strong>Role:</strong> <%= user.role %></p>
-                    </div>
-                </div>
-            </div>
+    <div class="profile-container">
+        <header>
+            <h2>Brand Name</h2>
+        </header>
+        
+        <div class="profile-header">
+            <div class="avatar"></div>
+            <h3><%= user.name %></h3>
+            <a href="/settings" class="button edit-profile">Edit Profile</a>
         </div>
+        
+        <main>
+            <div class="profile-info">
+                <label>About:</label>
+                <p><%= user.about %></p>
+                
+                <label>User ID:</label>
+                <p><%= user.id %></p>
+                
+                
+                <label>Name:</label>
+                <p><%= user.name %></p>
+                
+                <label>Email:</label>
+                <p><%= user.email %></p>
+                
+                <label>Phone:</label>
+                <p><%= user.phone %></p>
+            </div>
+            
+            <div class="profile-links">
+                <h4>Links:</h4>
+                <p><%= user.links %></p>
+            </div>
+            
+            <div class="profile-skills">
+                <h4>Skills:</h4>
+                <p><%= user.skills %></p>
+            </div>
+            <!-- Add Back to Dashboard button -->
+            <a href="/dashboard" class="button">Back to Dashboard</a>
+        </main>
     </div>
 </body>
 </html>
