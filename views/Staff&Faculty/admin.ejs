@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrative Dashboard</title>
+    <title><%= title %></title>
     <link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="nav-item">
                     <span class="icon">👨‍🏫</span>
-                    Professors
+                    Teachers
                 </div>
                 <div class="nav-item">
                     <span class="icon">👨‍🎓</span>
@@ -40,13 +40,13 @@
         <div class="main-content">
             <!-- Top Navigation -->
             <nav class="top-nav">
-                <div class="brand">Brandname</div>
+                <div class="brand">GreenField University</div>
                 <div class="search-bar">
-                    <input type="text" placeholder="What do you want to learn?">
+                    <input type="text" placeholder="What are you looking for?">
                 </div>
                 <div class="nav-links">
-                    <a href="#courses">My courses</a>
-                    <a href="#purchases">Purchases</a>
+                    <a href="#courses">Teachers</a>
+                    <a href="#purchases">Management</a>
                     <a href="#help">Help Center</a>
                     <div class="user-profile">
                         <img src="/path/to/profile.jpg" alt="Profile">
@@ -111,14 +111,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Name</td>
-                                <td>Name</td>
-                                <td>12/05/2026</td>
-                                <td>10:15</td>
-                                <td><button class="action-btn">Actions ▼</button></td>
-                            </tr>
-                            <!-- Add more rows as needed -->
+                            <% students.forEach(student => { %>
+                                <tr>
+                                    <td><%= student.name %></td>
+                                    <td>Brian</td>
+                                    <td>12/05/2026</td>
+                                    <td>10:15</td>
+                                    <td><button class="action-btn">Actions ▼</button></td>
+                                </tr>
+                            <% }) %>
                         </tbody>
                     </table>
                 </div>

@@ -3,18 +3,25 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const isAuthenticated = require('../middleware/auth');
 const Course = require('../models/Course'); // Import the Course model
+const User = require('../models/User'); // Import the User model
 
 // Redirect root URL to login page
 router.get('/', (req, res) => {
-  res.redirect('/login');
+  res.redirect('/Frontpage');
 });
 
 // Route to render the admin page
-router.get('/admin', isAuthenticated, (req, res) => {
+router.get('/admin', isAuthenticated, async (req, res) => {
   if (req.user.role !== 'admin') {
     return res.status(403).send('Access denied');
   }
-  res.render('Staff&Faculty/admin', { title: 'Admin Dashboard' });
+  try {
+    const students = await User.find({ role: 'student' });
+    res.render('Staff&Faculty/admin', { title: 'Admin Dashboard', students });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
 });
 
 // Route to render the teacher page
