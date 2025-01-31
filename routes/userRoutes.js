@@ -56,6 +56,9 @@ router.get('/login', (req, res) => {
 
 // Route to render the registration page
 router.get('/register', userController.renderRegisterPage);
+router.get('/Frontpage', (req, res) => {
+  res.render('Frontpage', { title: 'Frontpage' });
+});
 
 // Route to handle login form submission
 router.post('/login', userController.login);
