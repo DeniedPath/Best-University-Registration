@@ -1,0 +1,392 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Edit Course: <%= course.code %></h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <a href="/admin/courses" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Courses
+          </a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <form action="/admin/courses/<%= course._id %>/edit" method="POST" class="needs-validation" novalidate>
+            <!-- Course Information -->
+            <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Course Information</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">Course Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" value="<%= course.name %>" required>
+                    <div class="invalid-feedback">
+                      Please provide a course name.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="code" class="form-label">Course Code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="code" name="code" value="<%= course.code %>" placeholder="e.g. CS101" required>
+                    <div class="invalid-feedback">
+                      Please provide a course code.
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required><%= course.description %></textarea>
+                    <div class="invalid-feedback">
+                      Please provide a course description.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
+                    <select class="form-select" id="department" name="department" required>
+                      <option value="" disabled>Select Department</option>
+                      <option value="Computer Science" <%= course.department === 'Computer Science' ? 'selected' : '' %>>Computer Science</option>
+                      <option value="Mathematics" <%= course.department === 'Mathematics' ? 'selected' : '' %>>Mathematics</option>
+                      <option value="Physics" <%= course.department === 'Physics' ? 'selected' : '' %>>Physics</option>
+                      <option value="Chemistry" <%= course.department === 'Chemistry' ? 'selected' : '' %>>Chemistry</option>
+                      <option value="Biology" <%= course.department === 'Biology' ? 'selected' : '' %>>Biology</option>
+                      <option value="Engineering" <%= course.department === 'Engineering' ? 'selected' : '' %>>Engineering</option>
+                      <option value="Business" <%= course.department === 'Business' ? 'selected' : '' %>>Business</option>
+                      <option value="Arts" <%= course.department === 'Arts' ? 'selected' : '' %>>Arts</option>
+                      <option value="Humanities" <%= course.department === 'Humanities' ? 'selected' : '' %>>Humanities</option>
+                      <option value="Social Sciences" <%= course.department === 'Social Sciences' ? 'selected' : '' %>>Social Sciences</option>
+                      <option value="Medicine" <%= course.department === 'Medicine' ? 'selected' : '' %>>Medicine</option>
+                      <option value="Law" <%= course.department === 'Law' ? 'selected' : '' %>>Law</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a department.
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="credits" class="form-label">Credits <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="credits" name="credits" min="1" max="6" value="<%= course.credits %>" required>
+                    <div class="invalid-feedback">
+                      Please provide a valid number of credits (1-6).
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" value="<%= course.price %>" required>
+                    <div class="invalid-feedback">
+                      Please provide a valid price.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule Information -->
+            <div class="card mb-4">
+              <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i> Schedule Information</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <fieldset>
+                      <legend class="form-label" id="daysLabel">Days <span class="text-danger">*</span></legend>
+                      <div class="form-check" aria-labelledby="daysLabel">
+                        <input class="form-check-input" type="checkbox" value="Monday" id="monday" name="days" <%= course.schedule.days.includes('Monday') ? 'checked' : '' %>>
+                        <label class="form-check-label" for="monday">Monday</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="Tuesday" id="tuesday" name="days" <%= course.schedule.days.includes('Tuesday') ? 'checked' : '' %>>
+                        <label class="form-check-label" for="tuesday">Tuesday</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="Wednesday" id="wednesday" name="days" <%= course.schedule.days.includes('Wednesday') ? 'checked' : '' %>>
+                        <label class="form-check-label" for="wednesday">Wednesday</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="Thursday" id="thursday" name="days" <%= course.schedule.days.includes('Thursday') ? 'checked' : '' %>>
+                        <label class="form-check-label" for="thursday">Thursday</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="Friday" id="friday" name="days" <%= course.schedule.days.includes('Friday') ? 'checked' : '' %>>
+                        <label class="form-check-label" for="friday">Friday</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="Saturday" id="saturday" name="days" <%= course.schedule.days.includes('Saturday') ? 'checked' : '' %>>
+                        <label class="form-check-label" for="saturday">Saturday</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="Sunday" id="sunday" name="days" <%= course.schedule.days.includes('Sunday') ? 'checked' : '' %>>
+                        <label class="form-check-label" for="sunday">Sunday</label>
+                      </div>
+                      <div class="invalid-feedback">
+                        Please select at least one day.
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="startTime" class="form-label">Start Time <span class="text-danger">*</span></label>
+                      <input type="time" class="form-control" id="startTime" name="startTime" value="<%= course.schedule.startTime %>" required>
+                      <div class="invalid-feedback">
+                        Please provide a start time.
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="endTime" class="form-label">End Time <span class="text-danger">*</span></label>
+                      <input type="time" class="form-control" id="endTime" name="endTime" value="<%= course.schedule.endTime %>" required>
+                      <div class="invalid-feedback">
+                        Please provide an end time.
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="location" class="form-label">Location <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="location" name="location" value="<%= course.schedule.location %>" placeholder="e.g. Room 101" required>
+                      <div class="invalid-feedback">
+                        Please provide a location.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="semester" class="form-label">Semester <span class="text-danger">*</span></label>
+                    <select class="form-select" id="semester" name="semester" required>
+                      <option value="" disabled>Select Semester</option>
+                      <option value="Fall" <%= course.semester === 'Fall' ? 'selected' : '' %>>Fall</option>
+                      <option value="Spring" <%= course.semester === 'Spring' ? 'selected' : '' %>>Spring</option>
+                      <option value="Summer" <%= course.semester === 'Summer' ? 'selected' : '' %>>Summer</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a semester.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="year" class="form-label">Year <span class="text-danger">*</span></label>
+                    <select class="form-select" id="year" name="year" required>
+                      <option value="" disabled>Select Year</option>
+                      <option value="2025" <%= course.year === 2025 ? 'selected' : '' %>>2025</option>
+                      <option value="2026" <%= course.year === 2026 ? 'selected' : '' %>>2026</option>
+                      <option value="2027" <%= course.year === 2027 ? 'selected' : '' %>>2027</option>
+                      <option value="2028" <%= course.year === 2028 ? 'selected' : '' %>>2028</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a year.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="card mb-4">
+              <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-cog me-2"></i> Additional Information</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="instructor" class="form-label">Instructor</label>
+                    <select class="form-select" id="instructor" name="instructor">
+                      <option value="">Not Assigned</option>
+                      <% facultyMembers.forEach(faculty => { %>
+                        <option value="<%= faculty._id %>" <%= course.instructor && course.instructor.equals(faculty._id) ? 'selected' : '' %>><%= faculty.name %></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="capacity" class="form-label">Capacity <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" min="<%= course.enrolled %>" value="<%= course.capacity %>" required>
+                    <small class="text-muted">Minimum capacity is <%= course.enrolled %> (current enrollment)</small>
+                    <div class="invalid-feedback">
+                      Please provide a valid capacity (must be at least <%= course.enrolled %>).
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="prerequisites" class="form-label">Prerequisites</label>
+                    <select class="form-select" id="prerequisites" name="prerequisites" multiple>
+                      <% allCourses.forEach(prereq => { %>
+                        <option value="<%= prereq._id %>" <%= course.prerequisites.some(p => p.equals(prereq._id)) ? 'selected' : '' %>><%= prereq.code %>: <%= prereq.name %></option>
+                      <% }); %>
+                    </select>
+                    <small class="text-muted">Hold Ctrl (or Cmd) to select multiple courses.</small>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="syllabus" class="form-label">Syllabus</label>
+                    <textarea class="form-control" id="syllabus" name="syllabus" rows="5"><%= course.syllabus || '' %></textarea>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="isActive" name="isActive" <%= course.isActive ? 'checked' : '' %>>
+                      <label class="form-check-label" for="isActive">Course is active</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Enrollment Information -->
+            <div class="card mb-4">
+              <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i> Enrollment Information</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h6>Current Enrollment: <%= course.enrolled %> / <%= course.capacity %></h6>
+                    <div class="progress mb-3" style="height: 25px;">
+                      <% const enrollmentPercentage = (course.enrolled / course.capacity) * 100; %>
+                      <progress 
+                           class="w-100 <%= enrollmentPercentage > 80 ? 'bg-danger' : enrollmentPercentage > 50 ? 'bg-warning' : 'bg-success' %>"
+                           value="<%= course.enrolled %>" 
+                           max="<%= course.capacity %>">
+                        <%= course.enrolled %>/<%= course.capacity %> (<%= Math.round(enrollmentPercentage) %>%)
+                      </progress>
+                    </div>
+                    <% if (course.enrolled > 0) { %>
+                      <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> This course has <%= course.enrolled %> enrolled students. Some settings may be restricted.
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+              <a href="/admin/courses" class="btn btn-secondary me-md-2">Cancel</a>
+              <button type="submit" class="btn btn-primary">Update Course</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  document.addEventListener('DOMContentLoaded', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation');
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        // Custom validation for days checkboxes
+        const dayCheckboxes = form.querySelectorAll('input[name="days"]');
+        let daysSelected = false;
+        dayCheckboxes.forEach(checkbox => {
+          if (checkbox.checked) {
+            daysSelected = true;
+          }
+        });
+
+        if (!daysSelected) {
+          event.preventDefault();
+          event.stopPropagation();
+          dayCheckboxes[0].parentElement.parentElement.classList.add('was-validated');
+        }
+
+        form.classList.add('was-validated');
+      }, false);
+    });
+
+    // Time validation
+    const startTimeInput = document.getElementById('startTime');
+    const endTimeInput = document.getElementById('endTime');
+
+    endTimeInput.addEventListener('change', function() {
+      if (startTimeInput.value && endTimeInput.value) {
+        if (endTimeInput.value <= startTimeInput.value) {
+          endTimeInput.setCustomValidity('End time must be after start time');
+        } else {
+          endTimeInput.setCustomValidity('');
+        }
+      }
+    });
+
+    startTimeInput.addEventListener('change', function() {
+      if (startTimeInput.value && endTimeInput.value) {
+        if (endTimeInput.value <= startTimeInput.value) {
+          endTimeInput.setCustomValidity('End time must be after start time');
+        } else {
+          endTimeInput.setCustomValidity('');
+        }
+      }
+    });
+
+    // Capacity validation
+    const capacityInput = document.getElementById('capacity');
+    const enrolledCount = parseInt('<%= course.enrolled %>');
+    
+    capacityInput.addEventListener('change', function() {
+      if (parseInt(capacityInput.value) < enrolledCount) {
+        capacityInput.setCustomValidity(`Capacity must be at least ${enrolledCount} (current enrollment)`);
+      } else {
+        capacityInput.setCustomValidity('');
+      }
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

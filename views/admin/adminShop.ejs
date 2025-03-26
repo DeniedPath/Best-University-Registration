@@ -1,0 +1,390 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Shop Management</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+          </div>
+          <a href="/admin/shop/create" class="btn btn-sm btn-primary">
+            <i class="fas fa-plus me-1"></i> Add New Item
+          </a>
+        </div>
+      </div>
+
+      <!-- Flash Messages -->
+      <% if (typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= success_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+      
+      <% if (typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= error_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Shop Stats -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Total Items</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= totalItems %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-shopping-bag fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    Active Items</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= activeItems %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Featured Items</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= featuredItems %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-star fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                    Categories</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= Object.keys(categoryCounts).length %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-tags fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Shop Inventory</h6>
+          <div class="dropdown no-arrow">
+            <button type="button" class="dropdown-toggle btn btn-link p-0 text-decoration-none" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header">Actions:</div>
+              <a class="dropdown-item" href="/admin/shop/create">Add New Item</a>
+              <a class="dropdown-item" href="#">Export Inventory</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Generate Report</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search items...">
+                <button class="btn btn-outline-secondary" type="button">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <fieldset class="float-end">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-outline-primary active filter-btn" data-filter="all">All</button>
+                  <button type="button" class="btn btn-outline-primary filter-btn" data-filter="active">Active</button>
+                  <button type="button" class="btn btn-outline-primary filter-btn" data-filter="inactive">Inactive</button>
+                  <button type="button" class="btn btn-outline-primary filter-btn" data-filter="featured">Featured</button>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-12">
+              <div class="category-filters d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary active category-filter" data-category="all">
+                  All Categories <span class="badge bg-secondary ms-1"><%= totalItems %></span>
+                </button>
+                <% Object.keys(categoryCounts).forEach(category => { %>
+                  <button type="button" class="btn btn-sm btn-outline-secondary category-filter" data-category="<%= category %>">
+                    <%= category %> <span class="badge bg-secondary ms-1"><%= categoryCounts[category] %></span>
+                  </button>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shop Items Table -->
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="shopItemsTable">
+              <thead class="table-light">
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Inventory</th>
+                  <th>Status</th>
+                  <th>Featured</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (shopItems.length === 0) { %>
+                  <tr>
+                    <td colspan="8" class="text-center">No shop items found</td>
+                  </tr>
+                <% } else { %>
+                  <% shopItems.forEach(item => { %>
+                    <tr class="shop-item <%= item.isActive ? 'active' : 'inactive' %> <%= item.featured ? 'featured' : '' %>" data-category="<%= item.category %>">
+                      <td class="text-center">
+                        <img src="<%= item.imageUrl %>" alt="<%= item.name %>" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                      </td>
+                      <td>
+                        <strong><%= item.name %></strong>
+                        <div class="small text-muted text-truncate" style="max-width: 200px;"><%= item.description %></div>
+                      </td>
+                      <td><span class="badge bg-info"><%= item.category %></span></td>
+                      <td>$<%= item.price.toFixed(2) %></td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <%= item.inventory %>
+                          <% if (item.inventory < 10) { %>
+                            <span class="badge bg-danger ms-2">Low</span>
+                          <% } %>
+                        </div>
+                      </td>
+                      <td>
+                        <% if (item.isActive) { %>
+                          <span class="badge bg-success">Active</span>
+                        <% } else { %>
+                          <span class="badge bg-secondary">Inactive</span>
+                        <% } %>
+                      </td>
+                      <td class="text-center">
+                        <% if (item.featured) { %>
+                          <i class="fas fa-star text-warning"></i>
+                        <% } else { %>
+                          <i class="far fa-star text-muted"></i>
+                        <% } %>
+                      </td>
+                      <td>
+                        <div class="btn-group">
+                          <a href="/admin/shop/<%= item._id %>/edit" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i>
+                          </a>
+                          <a href="/admin/shop/<%= item._id %>/toggle" class="btn btn-sm <%= item.isActive ? 'btn-outline-secondary' : 'btn-outline-success' %>">
+                            <i class="fas <%= item.isActive ? 'fa-toggle-off' : 'fa-toggle-on' %>"></i>
+                          </a>
+                          <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<%= item._id %>" data-name="<%= item.name %>">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }) %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete <span id="itemName"></span>? This action cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a href="#" id="confirmDelete" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Delete modal
+  const deleteModal = document.getElementById('deleteModal');
+  if (deleteModal) {
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget;
+      const id = button.getAttribute('data-id');
+      const name = button.getAttribute('data-name');
+      
+      document.getElementById('itemName').textContent = name;
+      document.getElementById('confirmDelete').href = `/admin/shop/${id}/delete`;
+    });
+  }
+  
+  // Search functionality
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#shopItemsTable tbody tr');
+    
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      if (text.includes(searchValue)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+  
+  // Status filter
+  document.querySelectorAll('.filter-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      
+      const filter = this.getAttribute('data-filter');
+      const rows = document.querySelectorAll('#shopItemsTable tbody tr');
+      
+      rows.forEach(row => {
+        if (filter === 'all') {
+          row.style.display = '';
+        } else if (filter === 'active' && row.classList.contains('active')) {
+          row.style.display = '';
+        } else if (filter === 'inactive' && !row.classList.contains('active')) {
+          row.style.display = '';
+        } else if (filter === 'featured' && row.classList.contains('featured')) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+  
+  // Category filter
+  document.querySelectorAll('.category-filter').forEach(button => {
+    button.addEventListener('click', function() {
+      // Update active button
+      document.querySelectorAll('.category-filter').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      
+      const category = this.getAttribute('data-category');
+      const rows = document.querySelectorAll('#shopItemsTable tbody tr');
+      
+      rows.forEach(row => {
+        if (category === 'all') {
+          row.style.display = '';
+        } else if (row.getAttribute('data-category') === category) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

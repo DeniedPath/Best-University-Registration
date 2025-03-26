@@ -1,0 +1,338 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <%- include('../partials/sidebar') %>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2"><i class="fas fa-book me-2"></i> My Courses</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <a href="/courses/browse" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-search me-1"></i> Browse Courses
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <% if (messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= messages.success %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+      
+      <% if (messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= messages.error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Course Summary Stats -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Enrolled Courses</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= enrolledCourses.length %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    Total Credits</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <%= enrolledCourses.reduce((total, course) => total + (course.credits || 0), 0) %>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Overall Progress
+                  </div>
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                        <%= Math.round(Object.values(courseProgress).reduce((sum, val) => sum + val, 0) / (Object.values(courseProgress).length || 1)) %>%
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="progress progress-sm mr-2">
+                        <div class="progress-bar bg-info" role="progressbar" 
+                          style="width: <%= Math.round(Object.values(courseProgress).reduce((sum, val) => sum + val, 0) / (Object.values(courseProgress).length || 1)) %>%" 
+                          aria-valuenow="<%= Math.round(Object.values(courseProgress).reduce((sum, val) => sum + val, 0) / (Object.values(courseProgress).length || 1)) %>" 
+                          aria-valuemin="0" 
+                          aria-valuemax="100">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                    Pending Assignments</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                    <%= Object.values(assignmentsByCourse).flat().length %>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enrolled Courses -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">My Enrolled Courses</h6>
+          <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header">View Options:</div>
+              <a class="dropdown-item" href="#"><i class="fas fa-list fa-sm fa-fw me-2 text-gray-400"></i>List View</a>
+              <a class="dropdown-item" href="#"><i class="fas fa-th fa-sm fa-fw me-2 text-gray-400"></i>Grid View</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#"><i class="fas fa-sort-alpha-down fa-sm fa-fw me-2 text-gray-400"></i>Sort by Name</a>
+              <a class="dropdown-item" href="#"><i class="fas fa-calendar fa-sm fa-fw me-2 text-gray-400"></i>Sort by Date</a>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <% if (enrolledCourses.length === 0) { %>
+            <div class="text-center py-5">
+              <img src="/images/empty-courses.svg" alt="No courses" class="img-fluid mb-3" style="max-width: 200px;">
+              <h5>You are not enrolled in any courses yet</h5>
+              <p class="text-muted">Browse available courses and enroll to get started</p>
+              <a href="/courses/browse" class="btn btn-primary">Browse Courses</a>
+            </div>
+          <% } else { %>
+            <div class="row">
+              <% enrolledCourses.forEach(course => { %>
+                <div class="col-xl-4 col-md-6 mb-4">
+                  <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-gradient-primary text-white">
+                      <h5 class="card-title mb-0"><%= course.code %> - <%= course.name %></h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="d-flex align-items-center mb-3">
+                        <% if (course.instructor && course.instructor.profileImage) { %>
+                          <img src="<%= course.instructor.profileImage %>" class="rounded-circle me-2" width="40" height="40" alt="Instructor">
+                        <% } else { %>
+                          <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                            <i class="fas fa-user"></i>
+                          </div>
+                        <% } %>
+                        <div>
+                          <p class="mb-0 fw-bold">
+                            <%= course.instructor ? `${course.instructor.firstName} ${course.instructor.lastName}` : 'TBA' %>
+                          </p>
+                          <small class="text-muted">
+                            <%= course.department ? course.department.name : 'Department Not Assigned' %>
+                          </small>
+                        </div>
+                      </div>
+                      
+                      <p class="card-text mb-2"><%= course.description ? course.description.substring(0, 100) + '...' : 'No description available' %></p>
+                      
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-info"><%= course.credits %> Credits</span>
+                        <span class="badge bg-secondary"><%= course.schedule ? course.schedule.length : 0 %> Sessions/Week</span>
+                      </div>
+                      
+                      <div class="progress mb-2" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: <%= courseProgress[course._id.toString()] %>%;" 
+                          aria-valuenow="<%= courseProgress[course._id.toString()] %>" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                      <small class="text-muted"><%= courseProgress[course._id.toString()] %>% Complete</small>
+                      
+                      <hr>
+                      
+                      <div class="d-flex justify-content-between">
+                        <small class="text-muted">
+                          <i class="fas fa-tasks me-1"></i> 
+                          <%= assignmentsByCourse[course._id.toString()] ? assignmentsByCourse[course._id.toString()].length : 0 %> Assignments
+                        </small>
+                        <small class="text-muted">
+                          <i class="fas fa-users me-1"></i> 
+                          <%= course.enrolledStudents ? course.enrolledStudents.length : 0 %> Students
+                        </small>
+                      </div>
+                    </div>
+                    <div class="card-footer bg-light d-flex justify-content-between">
+                      <a href="/courses/<%= course._id %>" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-book-open me-1"></i> View Course
+                      </a>
+                      <a href="/courses/<%= course._id %>/assignments" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-tasks me-1"></i> Assignments
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              <% }); %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Available Courses -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Available Courses</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="availableCoursesTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Course Name</th>
+                  <th>Department</th>
+                  <th>Instructor</th>
+                  <th>Credits</th>
+                  <th>Schedule</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (allCourses.length === 0) { %>
+                  <tr>
+                    <td colspan="7" class="text-center">No available courses found</td>
+                  </tr>
+                <% } else { %>
+                  <% allCourses.slice(0, 5).forEach(course => { %>
+                    <tr>
+                      <td><%= course.code %></td>
+                      <td><%= course.name %></td>
+                      <td><%= course.department ? course.department.name : 'N/A' %></td>
+                      <td><%= course.instructor ? `${course.instructor.firstName} ${course.instructor.lastName}` : 'TBA' %></td>
+                      <td><%= course.credits %></td>
+                      <td>
+                        <% if (course.schedule && course.schedule.length > 0) { %>
+                          <small>
+                            <%= course.schedule.map(s => `${s.day} ${s.startTime}-${s.endTime}`).join('<br>') %>
+                          </small>
+                        <% } else { %>
+                          <span class="text-muted">Not scheduled</span>
+                        <% } %>
+                      </td>
+                      <td>
+                        <a href="/courses/<%= course._id %>" class="btn btn-sm btn-info">
+                          <i class="fas fa-info-circle"></i>
+                        </a>
+                        <a href="/courses/enroll/<%= course._id %>" class="btn btn-sm btn-success">
+                          <i class="fas fa-plus"></i> Enroll
+                        </a>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+          <% if (allCourses.length > 5) { %>
+            <div class="text-center mt-3">
+              <a href="/courses/browse" class="btn btn-primary">View All Available Courses</a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Course Detail Modal -->
+<div class="modal fade" id="courseDetailModal" tabindex="-1" aria-labelledby="courseDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="courseDetailModalLabel">Course Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="courseDetailContent">
+        <!-- Content will be loaded dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="#" id="enrollButton" class="btn btn-primary">Enroll</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Initialize DataTable for available courses
+  $(document).ready(function() {
+    $('#availableCoursesTable').DataTable({
+      pageLength: 5,
+      lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "All"]]
+    });
+    
+    // Course detail modal functionality
+    $('.view-course-details').on('click', function(e) {
+      e.preventDefault();
+      const courseId = $(this).data('course-id');
+      const enrollUrl = $(this).data('enroll-url');
+      
+      // Set the enroll button URL
+      $('#enrollButton').attr('href', enrollUrl);
+      
+      // Load course details via AJAX (placeholder)
+      $('#courseDetailContent').html('<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+      
+      // Show the modal
+      $('#courseDetailModal').modal('show');
+      
+      // In a real implementation, you would fetch course details from the server
+      // For now, we'll just simulate a delay
+      setTimeout(function() {
+        $('#courseDetailContent').html('<p>Course details would be loaded here...</p>');
+      }, 1000);
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>

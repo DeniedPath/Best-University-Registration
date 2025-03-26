@@ -1,0 +1,381 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Student Applications</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="exportBtn">
+              <i class="fas fa-file-export me-1"></i> Export
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="printBtn">
+              <i class="fas fa-print me-1"></i> Print
+            </button>
+          </div>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-filter me-1"></i> Filter
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+              <li><a class="dropdown-item filter-status" href="#" data-status="all">All Applications</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item filter-status" href="#" data-status="pending">Pending</a></li>
+              <li><a class="dropdown-item filter-status" href="#" data-status="approved">Approved</a></li>
+              <li><a class="dropdown-item filter-status" href="#" data-status="rejected">Rejected</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Box -->
+      <div class="row mb-4">
+        <div class="col-md-6 offset-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchInput" placeholder="Search applications...">
+            <button class="btn btn-outline-secondary" type="button" id="searchBtn">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Filters -->
+      <div class="mb-4">
+        <div class="btn-group" role="group" aria-label="Status filters">
+          <button type="button" class="btn btn-outline-primary status-btn active" data-status="all">
+            All <span class="badge bg-secondary ms-1"><%= applications.length %></span>
+          </button>
+          <button type="button" class="btn btn-outline-warning status-btn" data-status="pending">
+            Pending <span class="badge bg-secondary ms-1"><%= applications.filter(app => app.status === 'pending').length %></span>
+          </button>
+          <button type="button" class="btn btn-outline-success status-btn" data-status="approved">
+            Approved <span class="badge bg-secondary ms-1"><%= applications.filter(app => app.status === 'approved').length %></span>
+          </button>
+          <button type="button" class="btn btn-outline-danger status-btn" data-status="rejected">
+            Rejected <span class="badge bg-secondary ms-1"><%= applications.filter(app => app.status === 'rejected').length %></span>
+          </button>
+        </div>
+      </div>
+
+      <% if (applications.length === 0) { %>
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle me-2"></i> No applications found.
+        </div>
+      <% } else { %>
+        <!-- Applications Table -->
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Program</th>
+                <th scope="col">GPA</th>
+                <th scope="col">Date Applied</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsTableBody">
+              <% applications.forEach((application, index) => { %>
+                <tr class="application-row" data-status="<%= application.status %>">
+                  <td><%= index + 1 %></td>
+                  <td><%= application.firstName %> <%= application.lastName %></td>
+                  <td><%= application.email %></td>
+                  <td><%= application.desiredProgram %></td>
+                  <td><%= application.gpa.toFixed(1) %></td>
+                  <td><%= application.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+                  <td>
+                    <% if (application.status === 'pending') { %>
+                      <span class="badge bg-warning text-dark">Pending</span>
+                    <% } else if (application.status === 'approved') { %>
+                      <span class="badge bg-success">Approved</span>
+                    <% } else if (application.status === 'rejected') { %>
+                      <span class="badge bg-danger">Rejected</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <div class="btn-group">
+                      <a href="/admin/applications/<%= application._id %>" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                      <% if (application.status === 'pending') { %>
+                        <button type="button" class="btn btn-sm btn-success approve-btn" data-id="<%= application._id %>" data-bs-toggle="modal" data-bs-target="#approveModal" data-name="<%= application.firstName %> <%= application.lastName %>">
+                          <i class="fas fa-check"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger reject-btn" data-id="<%= application._id %>" data-bs-toggle="modal" data-bs-target="#rejectModal" data-name="<%= application.firstName %> <%= application.lastName %>">
+                          <i class="fas fa-times"></i>
+                        </button>
+                      <% } else if (application.isDummy) { %>
+                        <button type="button" class="btn btn-sm btn-warning reset-btn" data-id="<%= application._id %>">
+                          <i class="fas fa-redo"></i>
+                        </button>
+                      <% } %>
+                    </div>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Applications pagination">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="approveModalLabel">Approve Application</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to approve the application for <strong id="approveStudentName"></strong>?</p>
+        <p>This will create a student account and send login credentials to the applicant.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form id="approveForm" method="POST">
+          <button type="submit" class="btn btn-success">Approve</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="rejectModalLabel">Reject Application</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to reject the application for <strong id="rejectStudentName"></strong>?</p>
+        <div class="mb-3">
+          <label for="rejectionReason" class="form-label">Rejection Reason (Optional):</label>
+          <textarea class="form-control" id="rejectionReason" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form id="rejectForm" method="POST">
+          <input type="hidden" name="reason" id="rejectionReasonInput">
+          <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle approve button click
+    const approveButtons = document.querySelectorAll('.approve-btn');
+    approveButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const name = this.getAttribute('data-name');
+        document.getElementById('approveStudentName').textContent = name;
+        document.getElementById('approveForm').action = `/admin/applications/${id}/approve`;
+      });
+    });
+
+    // Handle reject button click
+    const rejectButtons = document.querySelectorAll('.reject-btn');
+    rejectButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const name = this.getAttribute('data-name');
+        document.getElementById('rejectStudentName').textContent = name;
+        document.getElementById('rejectForm').action = `/admin/applications/${id}/reject`;
+      });
+    });
+
+    // Handle rejection reason
+    document.getElementById('rejectForm').addEventListener('submit', function() {
+      const reason = document.getElementById('rejectionReason').value;
+      document.getElementById('rejectionReasonInput').value = reason;
+    });
+
+    // Handle status filter buttons
+    const statusButtons = document.querySelectorAll('.status-btn');
+    statusButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Update active button
+        statusButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Filter table rows
+        const status = this.getAttribute('data-status');
+        const rows = document.querySelectorAll('.application-row');
+        
+        rows.forEach(row => {
+          if (status === 'all' || row.getAttribute('data-status') === status) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Handle search
+    document.getElementById('searchBtn').addEventListener('click', function() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const rows = document.querySelectorAll('.application-row');
+      
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+
+    // Search on enter key
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        document.getElementById('searchBtn').click();
+      }
+    });
+
+    // Handle reset button for dummy data
+    const resetButtons = document.querySelectorAll('.reset-btn');
+    resetButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const row = this.closest('tr');
+        const statusCell = row.querySelector('td:nth-child(7)');
+        
+        // Toggle between statuses
+        const currentStatus = row.getAttribute('data-status');
+        let newStatus;
+        
+        if (currentStatus === 'pending') {
+          newStatus = 'approved';
+          statusCell.innerHTML = '<span class="badge bg-success">Approved</span>';
+        } else if (currentStatus === 'approved') {
+          newStatus = 'rejected';
+          statusCell.innerHTML = '<span class="badge bg-danger">Rejected</span>';
+        } else {
+          newStatus = 'pending';
+          statusCell.innerHTML = '<span class="badge bg-warning text-dark">Pending</span>';
+        }
+        
+        row.setAttribute('data-status', newStatus);
+        
+        // Update the counts in the filter buttons
+        updateStatusCounts();
+      });
+    });
+
+    // Function to update status counts
+    function updateStatusCounts() {
+      const rows = document.querySelectorAll('.application-row');
+      let pending = 0, approved = 0, rejected = 0;
+      
+      rows.forEach(row => {
+        const status = row.getAttribute('data-status');
+        if (status === 'pending') pending++;
+        else if (status === 'approved') approved++;
+        else if (status === 'rejected') rejected++;
+      });
+      
+      document.querySelector('.status-btn[data-status="all"] .badge').textContent = rows.length;
+      document.querySelector('.status-btn[data-status="pending"] .badge').textContent = pending;
+      document.querySelector('.status-btn[data-status="approved"] .badge').textContent = approved;
+      document.querySelector('.status-btn[data-status="rejected"] .badge').textContent = rejected;
+    }
+
+    // Handle export button
+    document.getElementById('exportBtn').addEventListener('click', function() {
+      alert('Export functionality would be implemented here.');
+    });
+
+    // Handle print button
+    document.getElementById('printBtn').addEventListener('click', function() {
+      window.print();
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

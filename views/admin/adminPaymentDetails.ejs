@@ -1,0 +1,354 @@
+<%- include('../partials/header') %>
+<%- include('partials/adminSidebar') %>
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Payment Details</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="/admin/payments">Payment Reports</a></li>
+            <li class="breadcrumb-item active">Payment Details</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Flash Messages -->
+      <% if(messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= messages.success %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+      <% if(messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= messages.error %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+
+      <div class="row">
+        <div class="col-md-8">
+          <!-- Payment Information Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-file-invoice-dollar mr-1"></i>
+                Transaction Information
+              </h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="info-box bg-light">
+                    <div class="info-box-content">
+                      <span class="info-box-text text-muted">Transaction ID</span>
+                      <span class="info-box-number text-bold"><%= payment.transactionId %></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-box bg-light">
+                    <div class="info-box-content">
+                      <span class="info-box-text text-muted">Date & Time</span>
+                      <span class="info-box-number text-bold"><%= new Date(payment.createdAt).toLocaleString() %></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <div class="info-box bg-light">
+                    <div class="info-box-content">
+                      <span class="info-box-text text-muted">Amount</span>
+                      <span class="info-box-number text-bold">$<%= payment.amount.toFixed(2) %> <%= payment.currency %></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-box bg-light">
+                    <div class="info-box-content">
+                      <span class="info-box-text text-muted">Status</span>
+                      <span class="info-box-number">
+                        <% if (payment.status === 'completed') { %>
+                          <span class="badge badge-success">Completed</span>
+                        <% } else if (payment.status === 'pending') { %>
+                          <span class="badge badge-warning">Pending</span>
+                        <% } else if (payment.status === 'failed') { %>
+                          <span class="badge badge-danger">Failed</span>
+                        <% } else if (payment.status === 'refunded') { %>
+                          <span class="badge badge-info">Refunded</span>
+                        <% } %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <div class="info-box bg-light">
+                    <div class="info-box-content">
+                      <span class="info-box-text text-muted">Payment Method</span>
+                      <span class="info-box-number">
+                        <% if (payment.paymentMethod === 'credit_card') { %>
+                          <i class="fas fa-credit-card"></i> Credit Card
+                        <% } else if (payment.paymentMethod === 'debit_card') { %>
+                          <i class="fas fa-credit-card"></i> Debit Card
+                        <% } else if (payment.paymentMethod === 'bank_transfer') { %>
+                          <i class="fas fa-university"></i> Bank Transfer
+                        <% } else if (payment.paymentMethod === 'paypal') { %>
+                          <i class="fab fa-paypal"></i> PayPal
+                        <% } else { %>
+                          <i class="fas fa-money-bill"></i> <%= payment.paymentMethod %>
+                        <% } %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="info-box bg-light">
+                    <div class="info-box-content">
+                      <span class="info-box-text text-muted">Payment Type</span>
+                      <span class="info-box-number">
+                        <% if (payment.paymentType === 'course_enrollment') { %>
+                          <i class="fas fa-graduation-cap"></i> Course Enrollment
+                        <% } else if (payment.paymentType === 'shop_purchase') { %>
+                          <i class="fas fa-shopping-cart"></i> Shop Purchase
+                        <% } else if (payment.paymentType === 'application_fee') { %>
+                          <i class="fas fa-file-alt"></i> Application Fee
+                        <% } else { %>
+                          <i class="fas fa-file-invoice-dollar"></i> <%= payment.paymentType %>
+                        <% } %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="info-box bg-light">
+                    <div class="info-box-content">
+                      <span class="info-box-text text-muted">Description</span>
+                      <span class="info-box-number"><%= payment.description %></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <% if (payment.receiptUrl) { %>
+                <div class="row mt-3">
+                  <div class="col-12">
+                    <div class="info-box bg-light">
+                      <div class="info-box-content">
+                        <span class="info-box-text text-muted">Receipt</span>
+                        <span class="info-box-number">
+                          <a href="<%= payment.receiptUrl %>" target="_blank" class="btn btn-sm btn-primary">
+                            <i class="fas fa-receipt"></i> View Receipt
+                          </a>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% } %>
+
+              <% if (payment.status === 'refunded' && payment.refundReason) { %>
+                <div class="row mt-3">
+                  <div class="col-12">
+                    <div class="info-box bg-light">
+                      <div class="info-box-content">
+                        <span class="info-box-text text-muted">Refund Reason</span>
+                        <span class="info-box-number"><%= payment.refundReason %></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Items Purchased -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-shopping-basket mr-1"></i>
+                Items
+              </h3>
+            </div>
+            <div class="card-body p-0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% payment.items.forEach(item => { %>
+                    <tr>
+                      <td><%= item.name %></td>
+                      <td>
+                        <% if (item.itemType === 'course') { %>
+                          <span class="badge badge-primary">Course</span>
+                        <% } else if (item.itemType === 'shop_item') { %>
+                          <span class="badge badge-success">Shop Item</span>
+                        <% } else if (item.itemType === 'application') { %>
+                          <span class="badge badge-warning">Application</span>
+                        <% } else { %>
+                          <span class="badge badge-secondary"><%= item.itemType %></span>
+                        <% } %>
+                      </td>
+                      <td>$<%= item.price.toFixed(2) %></td>
+                      <td><%= item.quantity %></td>
+                      <td>$<%= (item.price * item.quantity).toFixed(2) %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th scope="row" colspan="4" class="text-right">Total:</th>
+                    <th scope="row">$<%= payment.amount.toFixed(2) %></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <!-- User Information -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-user mr-1"></i>
+                User Information
+              </h3>
+            </div>
+            <div class="card-body box-profile">
+              <div class="text-center">
+                <div class="profile-user-img img-fluid img-circle bg-info d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; margin: 0 auto;">
+                  <span style="font-size: 40px; color: white;"><%= payment.user ? payment.user.name.charAt(0).toUpperCase() : 'U' %></span>
+                </div>
+              </div>
+              <h3 class="profile-username text-center"><%= payment.user ? payment.user.name : 'Unknown User' %></h3>
+              <p class="text-muted text-center"><%= payment.user ? payment.user.email : 'No email available' %></p>
+              <ul class="list-group list-group-unbordered mb-3">
+                <li class="list-group-item">
+                  <b>Role</b> <a class="float-right">
+                    <% if (payment.user && payment.user.role) { %>
+                      <% if (payment.user.role === 'admin') { %>
+                        <span class="badge badge-danger">Admin</span>
+                      <% } else if (payment.user.role === 'faculty') { %>
+                        <span class="badge badge-warning">Faculty</span>
+                      <% } else if (payment.user.role === 'student') { %>
+                        <span class="badge badge-primary">Student</span>
+                      <% } %>
+                    <% } else { %>
+                      <span class="badge badge-secondary">Unknown</span>
+                    <% } %>
+                  </a>
+                </li>
+                <li class="list-group-item">
+                  <b>User ID</b> <a class="float-right"><%= payment.user ? payment.user._id : 'N/A' %></a>
+                </li>
+              </ul>
+              <% if (payment.user) { %>
+                <a href="/admin/users/<%= payment.user._id %>/edit" class="btn btn-primary btn-block">
+                  <i class="fas fa-user-edit"></i> View User Profile
+                </a>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Update Payment Status -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-edit mr-1"></i>
+                Update Payment Status
+              </h3>
+            </div>
+            <div class="card-body">
+              <form action="/admin/payments/<%= payment._id %>/update-status" method="POST">
+                <div class="form-group">
+                  <label for="paymentStatus">Payment Status</label>
+                  <select class="form-control" name="status" id="paymentStatus">
+                    <option value="pending" <%= payment.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="completed" <%= payment.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                    <option value="failed" <%= payment.status === 'failed' ? 'selected' : '' %>>Failed</option>
+                    <option value="refunded" <%= payment.status === 'refunded' ? 'selected' : '' %>>Refunded</option>
+                  </select>
+                </div>
+                <div class="form-group" id="refundReasonGroup" style="<%= payment.status === 'refunded' ? '' : 'display: none;' %>">
+                  <label for="refundReason">Refund Reason</label>
+                  <textarea class="form-control" name="refundReason" id="refundReason" rows="3"><%= payment.refundReason || '' %></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Update Status</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <i class="fas fa-cogs mr-1"></i>
+                Actions
+              </h3>
+            </div>
+            <div class="card-body">
+              <a href="/admin/payments" class="btn btn-secondary btn-block mb-2">
+                <i class="fas fa-arrow-left"></i> Back to Payment Reports
+              </a>
+              <% if (payment.receiptUrl) { %>
+                <a href="<%= payment.receiptUrl %>" target="_blank" class="btn btn-info btn-block mb-2">
+                  <i class="fas fa-print"></i> Print Receipt
+                </a>
+              <% } %>
+              <button type="button" class="btn btn-warning btn-block" onclick="window.print()">
+                <i class="fas fa-print"></i> Print This Page
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Show/hide refund reason field based on status selection
+    const statusSelect = document.querySelector('select[name="status"]');
+    const refundReasonGroup = document.getElementById('refundReasonGroup');
+    
+    statusSelect.addEventListener('change', function() {
+      if (this.value === 'refunded') {
+        refundReasonGroup.style.display = '';
+      } else {
+        refundReasonGroup.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

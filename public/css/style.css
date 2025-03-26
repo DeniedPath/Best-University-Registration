@@ -1,0 +1,152 @@
+/* Main Styles for Best University Registration System */
+
+/* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+/* Navbar Customization */
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.nav-link {
+  font-weight: 500;
+}
+
+/* Card Styles */
+.card {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-bottom: 1.5rem;
+  border: none;
+}
+
+.card-header {
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+  font-weight: 600;
+}
+
+/* Button Styles */
+.btn {
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+}
+
+.btn-success {
+  background-color: #198754;
+}
+
+/* Form Styles */
+.form-control {
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Dashboard Styles */
+.dashboard-card {
+  transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.dashboard-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Course and Product Cards */
+.course-card, .product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover, .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.course-image, .product-image {
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+/* Profile Page */
+.profile-header {
+  background-color: #0d6efd;
+  color: white;
+  padding: 2rem 0;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.profile-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid white;
+  object-fit: cover;
+}
+
+/* Footer Styles */
+footer {
+  border-top: 1px solid #dee2e6;
+}
+
+footer a {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+footer a:hover {
+  color: #0d6efd !important;
+}
+
+.social-icons a {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.social-icons a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Animation */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

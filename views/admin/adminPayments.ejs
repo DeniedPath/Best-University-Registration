@@ -1,0 +1,323 @@
+<%- include('../partials/header') %>
+<%- include('partials/adminSidebar') %>
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Payment Reports</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active">Payment Reports</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <!-- Flash Messages -->
+      <% if(messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= messages.success %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+      <% if(messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= messages.error %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+
+      <!-- Revenue Statistics Cards -->
+      <div class="row">
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>$<%= totalRevenue.toFixed(2) %></h3>
+              <p>Total Revenue</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>$<%= courseRevenue.toFixed(2) %></h3>
+              <p>Course Revenue</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>$<%= shopRevenue.toFixed(2) %></h3>
+              <p>Shop Revenue</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-danger">
+            <div class="inner">
+              <h3>$<%= applicationRevenue.toFixed(2) %></h3>
+              <p>Application Fees</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Status Cards -->
+      <div class="row">
+        <div class="col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-success"><i class="fas fa-check"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Completed</span>
+              <span class="info-box-number"><%= completedPayments %></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-warning"><i class="fas fa-clock"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Pending</span>
+              <span class="info-box-number"><%= pendingPayments %></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-danger"><i class="fas fa-times"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Failed</span>
+              <span class="info-box-number"><%= failedPayments %></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="info-box">
+            <span class="info-box-icon bg-info"><i class="fas fa-undo"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Refunded</span>
+              <span class="info-box-number"><%= refundedPayments %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods Chart -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Payment Methods</h3>
+            </div>
+            <div class="card-body">
+              <canvas id="paymentMethodsChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Payment Types</h3>
+            </div>
+            <div class="card-body">
+              <div class="progress-group">
+                <span class="progress-text">Course Enrollments</span>
+                <span class="float-right"><b><%= payments.filter(p => p.paymentType === 'course_enrollment').length %></b>/<%= payments.length %></span>
+                <div class="progress progress-sm">
+                  <div class="progress-bar bg-primary" style="width: <%= (payments.filter(p => p.paymentType === 'course_enrollment').length / payments.length * 100).toFixed(0) %>%"></div>
+                </div>
+              </div>
+              <div class="progress-group">
+                <span class="progress-text">Shop Purchases</span>
+                <span class="float-right"><b><%= payments.filter(p => p.paymentType === 'shop_purchase').length %></b>/<%= payments.length %></span>
+                <div class="progress progress-sm">
+                  <div class="progress-bar bg-success" style="width: <%= (payments.filter(p => p.paymentType === 'shop_purchase').length / payments.length * 100).toFixed(0) %>%"></div>
+                </div>
+              </div>
+              <div class="progress-group">
+                <span class="progress-text">Application Fees</span>
+                <span class="float-right"><b><%= payments.filter(p => p.paymentType === 'application_fee').length %></b>/<%= payments.length %></span>
+                <div class="progress progress-sm">
+                  <div class="progress-bar bg-warning" style="width: <%= (payments.filter(p => p.paymentType === 'application_fee').length / payments.length * 100).toFixed(0) %>%"></div>
+                </div>
+              </div>
+              <div class="progress-group">
+                <span class="progress-text">Other Payments</span>
+                <span class="float-right"><b><%= payments.filter(p => p.paymentType === 'other').length %></b>/<%= payments.length %></span>
+                <div class="progress progress-sm">
+                  <div class="progress-bar bg-danger" style="width: <%= (payments.filter(p => p.paymentType === 'other').length / payments.length * 100).toFixed(0) %>%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payments Table -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Payment Transactions</h3>
+          <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <input type="text" id="payment-search" class="form-control float-right" placeholder="Search">
+              <div class="input-group-append">
+                <button type="button" class="btn btn-default">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body table-responsive p-0">
+          <table class="table table-hover text-nowrap" id="payments-table">
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Payment Method</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% payments.forEach(payment => { %>
+                <tr>
+                  <td><%= payment.transactionId %></td>
+                  <td><%= new Date(payment.createdAt).toLocaleDateString() %></td>
+                  <td><%= payment.user ? payment.user.name : 'Unknown User' %></td>
+                  <td><%= payment.description %></td>
+                  <td>$<%= payment.amount.toFixed(2) %></td>
+                  <td>
+                    <% if (payment.status === 'completed') { %>
+                      <span class="badge badge-success">Completed</span>
+                    <% } else if (payment.status === 'pending') { %>
+                      <span class="badge badge-warning">Pending</span>
+                    <% } else if (payment.status === 'failed') { %>
+                      <span class="badge badge-danger">Failed</span>
+                    <% } else if (payment.status === 'refunded') { %>
+                      <span class="badge badge-info">Refunded</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <% if (payment.paymentMethod === 'credit_card') { %>
+                      <i class="fas fa-credit-card"></i> Credit Card
+                    <% } else if (payment.paymentMethod === 'debit_card') { %>
+                      <i class="fas fa-credit-card"></i> Debit Card
+                    <% } else if (payment.paymentMethod === 'bank_transfer') { %>
+                      <i class="fas fa-university"></i> Bank Transfer
+                    <% } else if (payment.paymentMethod === 'paypal') { %>
+                      <i class="fab fa-paypal"></i> PayPal
+                    <% } else { %>
+                      <i class="fas fa-money-bill"></i> <%= payment.paymentMethod %>
+                    <% } %>
+                  </td>
+                  <td>
+                    <a href="/admin/payments/<%= payment._id %>" class="btn btn-info btn-sm">
+                      <i class="fas fa-eye"></i> View
+                    </a>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer clearfix">
+          <ul class="pagination pagination-sm m-0 float-right">
+            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Payment Methods Chart
+    const paymentMethodsCtx = document.getElementById('paymentMethodsChart').getContext('2d');
+    
+    // Convert payment methods object to arrays for Chart.js
+    const methodLabels = [];
+    const methodData = [];
+    const methodColors = [
+      '#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'
+    ];
+    
+    <% 
+    let index = 0;
+    for (const method in paymentMethods) { 
+      const displayName = method === 'credit_card' ? 'Credit Card' :
+                         method === 'debit_card' ? 'Debit Card' :
+                         method === 'bank_transfer' ? 'Bank Transfer' :
+                         method === 'paypal' ? 'PayPal' : method;
+    %>
+      methodLabels.push('<%= displayName %>');
+      methodData.push(<%= paymentMethods[method] %>);
+    <% 
+      index++;
+    } 
+    %>
+    
+    new Chart(paymentMethodsCtx, {
+      type: 'doughnut',
+      data: {
+        labels: methodLabels,
+        datasets: [{
+          data: methodData,
+          backgroundColor: methodColors.slice(0, methodData.length)
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true
+      }
+    });
+    
+    // Search functionality
+    document.getElementById('payment-search').addEventListener('keyup', function() {
+      const searchValue = this.value.toLowerCase();
+      const table = document.getElementById('payments-table');
+      const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+      
+      for (let i = 0; i < rows.length; i++) {
+        const rowText = rows[i].textContent.toLowerCase();
+        rows[i].style.display = rowText.includes(searchValue) ? '' : 'none';
+      }
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

@@ -1,0 +1,332 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Admin Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Print</button>
+          </div>
+          <button type="button" class="dropdown-toggle btn btn-link p-0 text-decoration-none" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-calendar me-1"></i>
+            This week
+          </button>
+        </div>
+      </div>
+
+      <!-- Overview Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Pending Applications</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= stats.pendingApplications %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    Total Students</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= stats.totalStudents %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Active Courses</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= stats.activeCourses %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-book-open fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                    Revenue (Monthly)</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">$<%= stats.monthlyRevenue.toLocaleString() %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Applications -->
+      <h2 class="h4 mb-3">Recent Applications</h2>
+      <div class="table-responsive mb-4">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Program</th>
+              <th scope="col">Submitted</th>
+              <th scope="col">Status</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (recentApplications && recentApplications.length > 0) { %>
+              <% recentApplications.forEach((application, index) => { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= application.firstName %> <%= application.lastName %></td>
+                  <td><%= application.program ? application.program.name : 'Not specified' %></td>
+                  <td><%= new Date(application.createdAt).toISOString().split('T')[0] %></td>
+                  <td>
+                    <% if (application.status === 'pending') { %>
+                      <span class="badge bg-warning text-dark">Pending</span>
+                    <% } else if (application.status === 'approved') { %>
+                      <span class="badge bg-success">Approved</span>
+                    <% } else if (application.status === 'rejected') { %>
+                      <span class="badge bg-danger">Rejected</span>
+                    <% } %>
+                  </td>
+                  <td>
+                    <a href="/admin/applications/<%= application._id %>" class="btn btn-sm btn-primary">View</a>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="6" class="text-center">No recent applications found</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Popular Courses -->
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Popular Courses</h6>
+              <div class="dropdown no-arrow">
+                <button type="button" class="dropdown-toggle btn btn-link p-0 text-decoration-none" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onKeyPress="if(event.key==='Enter') this.click()">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-header">Course Actions:</div>
+                  <a class="dropdown-item" href="/admin/courses">View All Courses</a>
+                  <a class="dropdown-item" href="/admin/courses/create">Add New Course</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Course Code</th>
+                      <th>Course Name</th>
+                      <th>Department</th>
+                      <th>Instructor</th>
+                      <th>Enrollment</th>
+                      <th>Capacity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (popularCourses && popularCourses.length > 0) { %>
+                      <% popularCourses.forEach(course => { %>
+                        <tr>
+                          <td><strong><%= course.code %></strong></td>
+                          <td><%= course.name %></td>
+                          <td><%= course.department %></td>
+                          <td><%= course.instructor ? course.instructor.name : 'Not Assigned' %></td>
+                          <td><%= course.enrolled %></td>
+                          <td>
+                            <div class="progress" style="height: 10px;">
+                              <% const percentage = Math.round((course.enrolled / course.capacity) * 100); %>
+                              <progress 
+                                   class="w-100"
+                                   value="<%= course.enrolled %>" 
+                                   max="<%= course.capacity %>">
+                                <%= percentage %>%
+                              </progress>
+                            </div>
+                            <small><%= course.enrolled %>/<%= course.capacity %> (<%= percentage %>%)</small>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="6" class="text-center">No courses found</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Status -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Server Status</h6>
+            </div>
+            <div class="card-body">
+              <p><strong>System:</strong> University Registration System</p>
+              <p><strong>Status:</strong> <span class="badge bg-success">Online</span></p>
+              <p><strong>Last Updated:</strong> <%= new Date().toLocaleString() %></p>
+              <p><strong>Version:</strong> 1.0.0</p>
+              <p><strong>Uptime:</strong> <span id="uptime">Loading...</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <a href="/admin/applications" class="btn btn-primary btn-block w-100">
+                    <i class="fas fa-clipboard-list me-1"></i> Review Applications
+                  </a>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <a href="/admin/users/create" class="btn btn-success btn-block w-100">
+                    <i class="fas fa-user-plus me-1"></i> Create User
+                  </a>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <a href="/admin/courses/create" class="btn btn-info btn-block w-100 text-white">
+                    <i class="fas fa-book-medical me-1"></i> Add Course
+                  </a>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <a href="/admin/settings" class="btn btn-secondary btn-block w-100">
+                    <i class="fas fa-cog me-1"></i> System Settings
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add custom JavaScript for admin dashboard -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Simple uptime counter
+    const startTime = new Date();
+    
+    function updateUptime() {
+      const now = new Date();
+      const diff = now - startTime;
+      
+      const hours = Math.floor(diff / 3600000);
+      const minutes = Math.floor((diff % 3600000) / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      
+      document.getElementById('uptime').textContent = 
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    updateUptime();
+    setInterval(updateUptime, 1000);
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

@@ -1,0 +1,343 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Add New Course</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <a href="/admin/courses" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Courses
+          </a>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <form action="/admin/courses/create" method="POST" class="needs-validation" novalidate>
+            <!-- Course Information -->
+            <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Course Information</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">Course Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                    <div class="invalid-feedback">
+                      Please provide a course name.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="code" class="form-label">Course Code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="code" name="code" placeholder="e.g. CS101" required>
+                    <div class="invalid-feedback">
+                      Please provide a course code.
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    <div class="invalid-feedback">
+                      Please provide a course description.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
+                    <select class="form-select" id="department" name="department" required>
+                      <option value="" selected disabled>Select Department</option>
+                      <option value="Computer Science">Computer Science</option>
+                      <option value="Mathematics">Mathematics</option>
+                      <option value="Physics">Physics</option>
+                      <option value="Chemistry">Chemistry</option>
+                      <option value="Biology">Biology</option>
+                      <option value="Engineering">Engineering</option>
+                      <option value="Business">Business</option>
+                      <option value="Arts">Arts</option>
+                      <option value="Humanities">Humanities</option>
+                      <option value="Social Sciences">Social Sciences</option>
+                      <option value="Medicine">Medicine</option>
+                      <option value="Law">Law</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a department.
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="credits" class="form-label">Credits <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="credits" name="credits" min="1" max="6" value="3" required>
+                    <div class="invalid-feedback">
+                      Please provide a valid number of credits (1-6).
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" value="0.00" required>
+                    <div class="invalid-feedback">
+                      Please provide a valid price.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule Information -->
+            <div class="card mb-4">
+              <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i> Schedule Information</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Days <span class="text-danger">*</span></label>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Monday" id="monday" name="days">
+                      <label class="form-check-label" for="monday">Monday</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Tuesday" id="tuesday" name="days">
+                      <label class="form-check-label" for="tuesday">Tuesday</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Wednesday" id="wednesday" name="days">
+                      <label class="form-check-label" for="wednesday">Wednesday</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Thursday" id="thursday" name="days">
+                      <label class="form-check-label" for="thursday">Thursday</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Friday" id="friday" name="days">
+                      <label class="form-check-label" for="friday">Friday</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Saturday" id="saturday" name="days">
+                      <label class="form-check-label" for="saturday">Saturday</label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="Sunday" id="sunday" name="days">
+                      <label class="form-check-label" for="sunday">Sunday</label>
+                    </div>
+                    <div class="invalid-feedback">
+                      Please select at least one day.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="startTime" class="form-label">Start Time <span class="text-danger">*</span></label>
+                      <input type="time" class="form-control" id="startTime" name="startTime" required>
+                      <div class="invalid-feedback">
+                        Please provide a start time.
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="endTime" class="form-label">End Time <span class="text-danger">*</span></label>
+                      <input type="time" class="form-control" id="endTime" name="endTime" required>
+                      <div class="invalid-feedback">
+                        Please provide an end time.
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="location" class="form-label">Location <span class="text-danger">*</span></label>
+                      <input type="text" class="form-control" id="location" name="location" placeholder="e.g. Room 101" required>
+                      <div class="invalid-feedback">
+                        Please provide a location.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="semester" class="form-label">Semester <span class="text-danger">*</span></label>
+                    <select class="form-select" id="semester" name="semester" required>
+                      <option value="" selected disabled>Select Semester</option>
+                      <option value="Fall">Fall</option>
+                      <option value="Spring">Spring</option>
+                      <option value="Summer">Summer</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a semester.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="year" class="form-label">Year <span class="text-danger">*</span></label>
+                    <select class="form-select" id="year" name="year" required>
+                      <option value="" selected disabled>Select Year</option>
+                      <option value="2025">2025</option>
+                      <option value="2026">2026</option>
+                      <option value="2027">2027</option>
+                      <option value="2028">2028</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a year.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="card mb-4">
+              <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-cog me-2"></i> Additional Information</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="instructor" class="form-label">Instructor</label>
+                    <select class="form-select" id="instructor" name="instructor">
+                      <option value="" selected>Not Assigned</option>
+                      <% facultyMembers.forEach(faculty => { %>
+                        <option value="<%= faculty._id %>"><%= faculty.name %></option>
+                      <% }); %>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="capacity" class="form-label">Capacity <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" min="1" value="30" required>
+                    <div class="invalid-feedback">
+                      Please provide a valid capacity.
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="prerequisites" class="form-label">Prerequisites</label>
+                    <select class="form-select" id="prerequisites" name="prerequisites" multiple>
+                      <% courses.forEach(course => { %>
+                        <option value="<%= course._id %>"><%= course.code %>: <%= course.name %></option>
+                      <% }); %>
+                    </select>
+                    <small class="text-muted">Hold Ctrl (or Cmd) to select multiple courses.</small>
+                  </div>
+                  <div class="col-md-12">
+                    <label for="syllabus" class="form-label">Syllabus</label>
+                    <textarea class="form-control" id="syllabus" name="syllabus" rows="5"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+              <a href="/admin/courses" class="btn btn-secondary me-md-2">Cancel</a>
+              <button type="submit" class="btn btn-primary">Create Course</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  document.addEventListener('DOMContentLoaded', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation');
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        // Custom validation for days checkboxes
+        const dayCheckboxes = form.querySelectorAll('input[name="days"]');
+        let daysSelected = false;
+        dayCheckboxes.forEach(checkbox => {
+          if (checkbox.checked) {
+            daysSelected = true;
+          }
+        });
+
+        if (!daysSelected) {
+          event.preventDefault();
+          event.stopPropagation();
+          dayCheckboxes[0].parentElement.parentElement.classList.add('was-validated');
+        }
+
+        form.classList.add('was-validated');
+      }, false);
+    });
+
+    // Time validation
+    const startTimeInput = document.getElementById('startTime');
+    const endTimeInput = document.getElementById('endTime');
+
+    endTimeInput.addEventListener('change', function() {
+      if (startTimeInput.value && endTimeInput.value) {
+        if (endTimeInput.value <= startTimeInput.value) {
+          endTimeInput.setCustomValidity('End time must be after start time');
+        } else {
+          endTimeInput.setCustomValidity('');
+        }
+      }
+    });
+
+    startTimeInput.addEventListener('change', function() {
+      if (startTimeInput.value && endTimeInput.value) {
+        if (endTimeInput.value <= startTimeInput.value) {
+          endTimeInput.setCustomValidity('End time must be after start time');
+        } else {
+          endTimeInput.setCustomValidity('');
+        }
+      }
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

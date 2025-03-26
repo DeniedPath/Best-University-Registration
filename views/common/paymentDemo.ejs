@@ -1,0 +1,116 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0"><%= title %></h2>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Payment Processing Not Available</strong>
+            <p class="mb-0 mt-2">
+              Stripe payment processing is not configured. In a production environment, you would be able to make payments here.
+            </p>
+          </div>
+
+          <% if (locals.course) { %>
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4><%= course.name %> (<%= course.code %>)</h4>
+              </div>
+              <div class="card-body">
+                <p><strong>Department:</strong> <%= course.department %></p>
+                <p><strong>Credits:</strong> <%= course.credits %></p>
+                <p><strong>Schedule:</strong> <%= course.schedule.days.join(', ') %>, <%= course.schedule.startTime %> - <%= course.schedule.endTime %></p>
+                <p><strong>Location:</strong> <%= course.schedule.location %></p>
+                <p><strong>Price:</strong> $<%= course.price.toFixed(2) %></p>
+              </div>
+            </div>
+          <% } %>
+
+          <% if (locals.cartItems && cartItems.length > 0) { %>
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4>Your Cart</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% cartItems.forEach(item => { %>
+                        <tr>
+                          <td><%= item.product.name %></td>
+                          <td>$<%= item.product.price.toFixed(2) %></td>
+                          <td><%= item.quantity %></td>
+                          <td>$<%= item.subtotal.toFixed(2) %></td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th scope="row" colspan="3" class="text-end">Total:</th>
+                        <th scope="row">$<%= total.toFixed(2) %></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+          <% } %>
+
+          <div class="demo-payment-form p-4 border rounded bg-light">
+            <h4 class="mb-3">Demo Payment Form</h4>
+            
+            <div class="form-group mb-3">
+              <label for="cardNumber">Card Number</label>
+              <input type="text" class="form-control" id="cardNumber" value="4242 4242 4242 4242" disabled>
+              <small class="text-muted">This would be a secure Stripe payment form in production.</small>
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="expDate">Expiration Date</label>
+                <input type="text" class="form-control" id="expDate" value="12/25" disabled>
+              </div>
+              <div class="col-md-6">
+                <label for="cvv">CVV</label>
+                <input type="text" class="form-control" id="cvv" value="123" disabled>
+              </div>
+            </div>
+            
+            <div class="form-group mb-4">
+              <label for="cardName">Name on Card</label>
+              <input type="text" class="form-control" id="cardName" value="Demo User" disabled>
+            </div>
+            
+            <button class="btn btn-success btn-lg w-100" disabled>
+              <i class="fas fa-lock me-2"></i>Pay $<%= locals.course ? course.price.toFixed(2) : (locals.total ? total.toFixed(2) : '0.00') %>
+            </button>
+          </div>
+
+          <div class="mt-4 text-center">
+            <% if (locals.course) { %>
+              <a href="/courses" class="btn btn-outline-primary">Back to Courses</a>
+            <% } else { %>
+              <a href="/shop" class="btn btn-outline-primary">Back to Shop</a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+

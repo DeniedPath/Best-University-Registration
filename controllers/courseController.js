@@ -1,10 +1,10 @@
-const Course = require('../models/Course');
+const Course = require('../models/course');
 
 // Render the courses page
 exports.listCourses = async (req, res) => {
   try {
     const courses = await Course.find();
-    res.render('course', { title: 'Available Courses', courses });
+    res.render('student/courses', { title: 'Available Courses', courses });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
@@ -37,7 +37,7 @@ exports.enrollCourse = async (req, res) => {
   
   // Render the page to add a new course
   exports.renderAddCoursePage = (req, res) => {
-    res.render('addCourse', { title: 'Add Course' });
+    res.render('admin/addCourse', { title: 'Add Course' });
   };
   
   // Handle adding a new course
@@ -58,7 +58,7 @@ exports.enrollCourse = async (req, res) => {
 exports.renderEditCoursePage = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id);
-    res.render('editCourse', { title: 'Edit Course', course });
+    res.render('admin/editCourse', { title: 'Edit Course', course });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
@@ -91,7 +91,7 @@ exports.deleteCourse = async (req, res) => {
 exports.renderDashboardPage = async (req, res) => {
   try {
     const courses = await Course.find();
-    res.render('dashboard', { title: 'Dashboard', courses });
+    res.render('student/dashboard', { title: 'Dashboard', courses });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');

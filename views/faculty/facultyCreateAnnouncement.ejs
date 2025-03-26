@@ -1,0 +1,209 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Faculty Portal</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'dashboard' ? 'active' : '' %>" href="/faculty/dashboard">
+              <i class="fas fa-chalkboard-teacher me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'courses' ? 'active' : '' %>" href="/faculty/courses">
+              <i class="fas fa-book me-2"></i>
+              My Courses
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'students' ? 'active' : '' %>" href="/faculty/students">
+              <i class="fas fa-user-graduate me-2"></i>
+              My Students
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'grades' ? 'active' : '' %>" href="/faculty/grades">
+              <i class="fas fa-chart-line me-2"></i>
+              Grade Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'announcements' ? 'active' : '' %>" href="/faculty/dashboard">
+              <i class="fas fa-bullhorn me-2"></i>
+              Announcements
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Create Announcement</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <a href="/faculty/dashboard" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+          </a>
+        </div>
+      </div>
+
+      <!-- Alert Messages -->
+      <% if (messages && messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= messages.error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+      <% if (messages && messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= messages.success %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Announcement Creation Form -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Announcement Information</h5>
+        </div>
+        <div class="card-body">
+          <form action="/faculty/announcements/create" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label for="title" class="form-label">Announcement Title*</label>
+              <input type="text" class="form-control" id="title" name="title" placeholder="e.g. Important Course Update" required>
+              <div class="invalid-feedback">
+                Title is required.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="content" class="form-label">Announcement Content*</label>
+              <textarea class="form-control" id="content" name="content" rows="6" placeholder="Enter the announcement content..." required></textarea>
+              <div class="invalid-feedback">
+                Content is required.
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="courseId" class="form-label">Course (Optional)</label>
+                <select class="form-select" id="courseId" name="courseId">
+                  <option value="" selected>All Courses (General Announcement)</option>
+                  <% if (courses && courses.length > 0) { %>
+                    <% courses.forEach(course => { %>
+                      <option value="<%= course._id %>"><%= course.code %> - <%= course.name %></option>
+                    <% }); %>
+                  <% } else { %>
+                    <option value="" disabled>No active courses available</option>
+                  <% } %>
+                </select>
+                <div class="form-text">
+                  If selected, this announcement will only be visible to students in this course.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="priority" class="form-label">Priority</label>
+                <select class="form-select" id="priority" name="priority">
+                  <option value="low">Low</option>
+                  <option value="normal" selected>Normal</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="expiryDate" class="form-label">Expiry Date (Optional)</label>
+                <input type="date" class="form-control" id="expiryDate" name="expiryDate" min="<%= today %>" value="<%= defaultExpiryDate %>">
+                <div class="form-text">
+                  Date when this announcement will no longer be displayed. Leave empty for no expiry.
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="sendEmail" name="sendEmail">
+                <label class="form-check-label" for="sendEmail">Send Email Notification</label>
+              </div>
+              <div class="form-text">
+                If checked, an email will be sent to all affected students.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="visibleToStudents" name="visibleToStudents" checked>
+                <label class="form-check-label" for="visibleToStudents">Make Visible to Students</label>
+              </div>
+              <div class="form-text">
+                If unchecked, the announcement will be saved as a draft and not visible to students.
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle me-2"></i> Announcements will be displayed on the dashboard of all relevant users.
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <button type="reset" class="btn btn-outline-secondary me-md-2">
+                <i class="fas fa-undo me-1"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-bullhorn me-1"></i> Publish Announcement
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  (function() {
+    'use strict';
+    
+    // Fetch all forms we want to apply validation to
+    var forms = document.querySelectorAll('.needs-validation');
+    
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(function(form) {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        
+        form.classList.add('was-validated');
+      }, false);
+    });
+    
+    // Update form based on course selection
+    document.getElementById('courseId').addEventListener('change', function() {
+      const sendEmailSwitch = document.getElementById('sendEmail');
+      // If "All Courses" is selected, show a warning about email notifications
+      if (this.value === '') {
+        sendEmailSwitch.disabled = false;
+        if (sendEmailSwitch.checked) {
+          if (!confirm('Sending email notifications for a general announcement will email ALL students. Continue?')) {
+            sendEmailSwitch.checked = false;
+          }
+        }
+      } else {
+        sendEmailSwitch.disabled = false;
+      }
+    });
+  })();
+</script>
+
+<%- include('../partials/footer') %>

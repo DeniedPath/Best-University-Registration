@@ -1,0 +1,314 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Faculty Portal</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="/faculty/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/faculty/courses">
+              <i class="fas fa-book me-2"></i>
+              My Courses
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/faculty/students">
+              <i class="fas fa-users me-2"></i>
+              My Students
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/faculty/grades">
+              <i class="fas fa-graduation-cap me-2"></i>
+              Grade Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">
+              <i class="fas fa-user-circle me-2"></i>
+              My Profile
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Faculty Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <a href="/faculty/announcements/create" class="btn btn-sm btn-primary me-2">
+            <i class="fas fa-bullhorn me-1"></i> Create Announcement
+          </a>
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-download me-1"></i> Export
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-print me-1"></i> Print
+            </button>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <i class="fas fa-calendar me-1"></i> This semester
+          </button>
+        </div>
+      </div>
+
+      <!-- Flash Messages -->
+      <% if(locals.messages && messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= messages.success %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+      <% if(locals.messages && messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= messages.error %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+
+      <!-- Stats Cards -->
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Courses Teaching</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= totalCourses || 0 %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-book fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    Total Students</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= totalStudents || 0 %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-users fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Assignments Pending Review</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= recentAssignments ? recentAssignments.length : 0 %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Courses -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">My Courses</h6>
+          <a href="/faculty/courses" class="btn btn-sm btn-primary">View All</a>
+        </div>
+        <div class="card-body">
+          <% if (courses && courses.length > 0) { %>
+            <div class="table-responsive">
+              <table class="table table-bordered w-100">
+                <thead>
+                  <tr>
+                    <th scope="col">Course Code</th>
+                    <th scope="col">Course Name</th>
+                    <th scope="col">Schedule</th>
+                    <th scope="col">Students</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% courses.slice(0, 5).forEach(course => { %>
+                    <tr>
+                      <td><%= course.code %></td>
+                      <td><%= course.name %></td>
+                      <td><%= course.schedule || 'Not scheduled' %></td>
+                      <td><%= course.studentCount || 0 %></td>
+                      <td>
+                        <a href="/faculty/courses/<%= course._id %>" class="btn btn-sm btn-info">
+                          <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="/faculty/courses/<%= course._id %>/grades" class="btn btn-sm btn-primary">
+                          <i class="fas fa-graduation-cap"></i>
+                        </a>
+                        <a href="/faculty/courses/<%= course._id %>/assignments" class="btn btn-sm btn-success">
+                          <i class="fas fa-tasks"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <div class="text-center py-4">
+              <p class="lead text-muted">You are not currently teaching any courses.</p>
+              <p>Contact the administration if you believe this is an error.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Announcements -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Announcements</h6>
+              <a href="/faculty/announcements/create" class="btn btn-sm btn-primary">Create New</a>
+            </div>
+            <div class="card-body">
+              <% if (typeof announcements !== 'undefined' && announcements && announcements.length > 0) { %>
+                <div class="list-group">
+                  <% announcements.forEach(announcement => { %>
+                    <div class="list-group-item list-group-item-action">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">
+                          <% if (announcement.priority === 'high' || announcement.priority === 'urgent') { %>
+                            <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i></span>
+                          <% } %>
+                          <%= announcement.title %>
+                        </h6>
+                        <small class="text-muted"><%= new Date(announcement.createdAt).toLocaleDateString() %></small>
+                      </div>
+                      <p class="mb-1 text-truncate"><%= announcement.content %></p>
+                      <small>
+                        <% if (announcement.course) { %>
+                          <span class="badge bg-info"><%= announcement.course.code %></span>
+                        <% } else { %>
+                          <span class="badge bg-secondary">General</span>
+                        <% } %>
+                        <% if (announcement.visibleToStudents) { %>
+                          <span class="badge bg-success">Published</span>
+                        <% } else { %>
+                          <span class="badge bg-warning text-dark">Draft</span>
+                        <% } %>
+                      </small>
+                    </div>
+                  <% }); %>
+                </div>
+              <% } else { %>
+                <div class="text-center py-4">
+                  <i class="fas fa-bullhorn fa-3x text-muted mb-3"></i>
+                  <p>No announcements yet.</p>
+                  <a href="/faculty/announcements/create" class="btn btn-sm btn-primary">
+                    Create Your First Announcement
+                  </a>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Classes -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Upcoming Classes</h6>
+            </div>
+            <div class="card-body">
+              <% if (upcomingClasses && upcomingClasses.length > 0) { %>
+                <div class="list-group">
+                  <% upcomingClasses.forEach(course => { %>
+                    <a href="/faculty/courses/<%= course._id %>" class="list-group-item list-group-item-action">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><%= course.name %></h5>
+                        <small><%= new Date(course.scheduleDay).toLocaleDateString() %></small>
+                      </div>
+                      <p class="mb-1"><%= course.schedule %></p>
+                      <small>Room: <%= course.room || 'TBA' %></small>
+                    </a>
+                  <% }); %>
+                </div>
+              <% } else { %>
+                <div class="text-center py-4">
+                  <p class="text-muted">No upcoming classes in the next 7 days.</p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Assignments -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Recent Assignments</h6>
+          <a href="/faculty/assignments" class="btn btn-sm btn-primary">View All</a>
+        </div>
+        <div class="card-body">
+          <% if (recentAssignments && recentAssignments.length > 0) { %>
+            <div class="list-group">
+              <% recentAssignments.forEach(assignment => { %>
+                <a href="/faculty/assignments/<%= assignment._id %>" class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= assignment.title %></h5>
+                    <small><%= assignment.submittedDate %></small>
+                  </div>
+                  <p class="mb-1"><%= assignment.courseName %></p>
+                  <small><%= assignment.studentName %></small>
+                </a>
+              <% }); %>
+            </div>
+          <% } else { %>
+            <div class="text-center py-4">
+              <p class="text-muted">No recent assignments to review.</p>
+              <a href="/faculty/assignments/create" class="btn btn-primary mt-2">
+                <i class="fas fa-plus me-1"></i> Create Assignment
+              </a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add custom JavaScript for faculty dashboard -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize any dashboard widgets or charts here
+    console.log('Faculty Dashboard loaded');
+  });
+</script>
+
+<%- include('../partials/footer') %>

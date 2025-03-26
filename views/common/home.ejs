@@ -1,0 +1,261 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <!-- Hero Section -->
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <div class="card bg-primary text-white">
+        <div class="card-body p-5 text-center">
+          <h1 class="display-4 mb-4">Welcome to Best University</h1>
+          <p class="lead mb-4">Empowering students with quality education and innovative learning experiences</p>
+          <div class="mt-4">
+            <a href="/courses" class="btn btn-light btn-lg me-2">
+              <i class="fas fa-book me-2"></i>Browse Courses
+            </a>
+            <a href="/apply" class="btn btn-outline-light btn-lg">
+              <i class="fas fa-user-plus me-2"></i>Apply Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="row mb-5">
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-body text-center p-4">
+          <div class="dashboard-icon text-primary">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3>Quality Education</h3>
+          <p>Our programs are designed to provide students with the knowledge and skills needed for success in their chosen fields.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-body text-center p-4">
+          <div class="dashboard-icon text-primary">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Expert Faculty</h3>
+          <p>Learn from industry professionals and academic experts who are dedicated to your success.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-body text-center p-4">
+          <div class="dashboard-icon text-primary">
+            <i class="fas fa-laptop"></i>
+          </div>
+          <h3>Modern Facilities</h3>
+          <p>Access state-of-the-art facilities and resources to enhance your learning experience.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Courses Section -->
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h2 class="mb-0">Featured Courses</h2>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <% if (locals.featuredCourses && featuredCourses.length > 0) { %>
+              <% featuredCourses.forEach(course => { %>
+                <div class="col-md-4 mb-4">
+                  <div class="card h-100 course-card">
+                    <img src="<%= course.imageUrl || '/images/course-placeholder.jpg' %>" class="card-img-top course-image" alt="<%= course.name %>">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= course.name %></h5>
+                      <p class="card-text"><%= course.description.substring(0, 100) %>...</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary"><%= course.department %></span>
+                        <span class="text-muted"><%= course.credits %> Credits</span>
+                      </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                      <a href="/courses/<%= course._id %>" class="btn btn-outline-primary w-100">View Details</a>
+                    </div>
+                  </div>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <div class="col-md-12">
+                <div class="alert alert-info">
+                  <i class="fas fa-info-circle me-2"></i>
+                  Featured courses will be displayed here. Check back soon!
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-4">
+                    <div class="card h-100 course-card">
+                      <img src="/images/course-placeholder.jpg" class="card-img-top course-image" alt="Introduction to Computer Science">
+                      <div class="card-body">
+                        <h5 class="card-title">Introduction to Computer Science</h5>
+                        <p class="card-text">A comprehensive introduction to computer science principles, programming, and problem-solving techniques.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="badge bg-primary">Computer Science</span>
+                          <span class="text-muted">3 Credits</span>
+                        </div>
+                      </div>
+                      <div class="card-footer bg-white">
+                        <a href="/courses" class="btn btn-outline-primary w-100">View Details</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-4">
+                    <div class="card h-100 course-card">
+                      <img src="/images/course-placeholder.jpg" class="card-img-top course-image" alt="Business Administration">
+                      <div class="card-body">
+                        <h5 class="card-title">Business Administration</h5>
+                        <p class="card-text">Learn the fundamentals of business management, leadership, and organizational behavior.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="badge bg-primary">Business</span>
+                          <span class="text-muted">4 Credits</span>
+                        </div>
+                      </div>
+                      <div class="card-footer bg-white">
+                        <a href="/courses" class="btn btn-outline-primary w-100">View Details</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-4">
+                    <div class="card h-100 course-card">
+                      <img src="/images/course-placeholder.jpg" class="card-img-top course-image" alt="Psychology 101">
+                      <div class="card-body">
+                        <h5 class="card-title">Psychology 101</h5>
+                        <p class="card-text">Explore the human mind, behavior, and psychological theories in this introductory course.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="badge bg-primary">Psychology</span>
+                          <span class="text-muted">3 Credits</span>
+                        </div>
+                      </div>
+                      <div class="card-footer bg-white">
+                        <a href="/courses" class="btn btn-outline-primary w-100">View Details</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        <div class="card-footer bg-white text-center">
+          <a href="/courses" class="btn btn-primary">View All Courses</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h2 class="mb-0">Student Testimonials</h2>
+        </div>
+        <div class="card-body p-4">
+          <div class="row">
+            <div class="col-md-4 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="mb-3 text-warning">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <p class="card-text">"Best University has provided me with the skills and knowledge I needed to succeed in my career. The faculty is exceptional and the courses are engaging."</p>
+                </div>
+                <div class="card-footer bg-white">
+                  <div class="d-flex align-items-center">
+                    <div class="me-3">
+                      <img src="/images/avatar-placeholder.jpg" alt="Student" class="rounded-circle" width="50" height="50">
+                    </div>
+                    <div>
+                      <h6 class="mb-0">Sarah Johnson</h6>
+                      <small class="text-muted">Computer Science Graduate</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="mb-3 text-warning">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <p class="card-text">"The supportive environment and quality education at Best University have been instrumental in my academic and personal growth. Highly recommended!"</p>
+                </div>
+                <div class="card-footer bg-white">
+                  <div class="d-flex align-items-center">
+                    <div class="me-3">
+                      <img src="/images/avatar-placeholder.jpg" alt="Student" class="rounded-circle" width="50" height="50">
+                    </div>
+                    <div>
+                      <h6 class="mb-0">Michael Chen</h6>
+                      <small class="text-muted">Business Administration Student</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="mb-3 text-warning">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </div>
+                  <p class="card-text">"The professors are knowledgeable and passionate about their subjects. The campus facilities are modern and conducive to learning. Great experience!"</p>
+                </div>
+                <div class="card-footer bg-white">
+                  <div class="d-flex align-items-center">
+                    <div class="me-3">
+                      <img src="/images/avatar-placeholder.jpg" alt="Student" class="rounded-circle" width="50" height="50">
+                    </div>
+                    <div>
+                      <h6 class="mb-0">Emily Rodriguez</h6>
+                      <small class="text-muted">Psychology Major</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Call to Action -->
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <div class="card bg-light">
+        <div class="card-body p-5 text-center">
+          <h2 class="mb-4">Ready to Start Your Academic Journey?</h2>
+          <p class="lead mb-4">Join our community of learners and take the first step towards a successful future.</p>
+          <a href="/apply" class="btn btn-primary btn-lg">Apply Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+

@@ -1,0 +1,257 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">System Settings</h1>
+      </div>
+
+      <!-- Flash Messages -->
+      <% if(locals.messages && messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= messages.success %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+      <% if(locals.messages && messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= messages.error %>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      <% } %>
+
+      <div class="row">
+        <!-- General Settings -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">General Settings</h6>
+            </div>
+            <div class="card-body">
+              <form action="/admin/settings" method="POST">
+                <div class="form-group mb-3">
+                  <label for="siteName">University Name</label>
+                  <input type="text" class="form-control" id="siteName" name="siteName" value="Best University" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="siteEmail">Contact Email</label>
+                  <input type="email" class="form-control" id="siteEmail" name="siteEmail" value="contact@bestuniversity.edu" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="sitePhone">Contact Phone</label>
+                  <input type="text" class="form-control" id="sitePhone" name="sitePhone" value="(555) 123-4567" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="siteAddress">University Address</label>
+                  <textarea class="form-control" id="siteAddress" name="siteAddress" rows="3" required>123 University Ave, College Town, CT 12345</textarea>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="academicYear">Current Academic Year</label>
+                  <input type="text" class="form-control" id="academicYear" name="academicYear" value="2024-2025" required>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="currentSemester">Current Semester</label>
+                  <select class="form-control" id="currentSemester" name="currentSemester">
+                    <option value="Fall">Fall</option>
+                    <option value="Spring" selected>Spring</option>
+                    <option value="Summer">Summer</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save General Settings</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Settings -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Email Settings</h6>
+            </div>
+            <div class="card-body">
+              <form action="/admin/settings" method="POST">
+                <div class="form-group mb-3">
+                  <label for="smtpHost">SMTP Host</label>
+                  <input type="text" class="form-control" id="smtpHost" name="smtpHost" value="smtp.bestuniversity.edu">
+                </div>
+                <div class="form-group mb-3">
+                  <label for="smtpPort">SMTP Port</label>
+                  <input type="number" class="form-control" id="smtpPort" name="smtpPort" value="587">
+                </div>
+                <div class="form-group mb-3">
+                  <label for="smtpUser">SMTP Username</label>
+                  <input type="text" class="form-control" id="smtpUser" name="smtpUser" value="notifications@bestuniversity.edu">
+                </div>
+                <div class="form-group mb-3">
+                  <label for="smtpPassword">SMTP Password</label>
+                  <input type="password" class="form-control" id="smtpPassword" name="smtpPassword" value="••••••••••••">
+                </div>
+                <div class="form-group mb-3">
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="smtpSecure" name="smtpSecure" checked>
+                    <label class="custom-control-label" for="smtpSecure">Use Secure Connection (TLS/SSL)</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Email Settings</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Payment Settings -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Payment Settings</h6>
+            </div>
+            <div class="card-body">
+              <form action="/admin/settings" method="POST">
+                <div class="form-group mb-3">
+                  <label for="currencyCode">Currency</label>
+                  <select class="form-control" id="currencyCode" name="currencyCode">
+                    <option value="USD" selected>USD - US Dollar</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="GBP">GBP - British Pound</option>
+                    <option value="CAD">CAD - Canadian Dollar</option>
+                  </select>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="stripePublicKey">Stripe Public Key</label>
+                  <input type="text" class="form-control" id="stripePublicKey" name="stripePublicKey" value="pk_test_TYooMQauvdEDq54NiTphI7jx">
+                </div>
+                <div class="form-group mb-3">
+                  <label for="stripeSecretKey">Stripe Secret Key</label>
+                  <input type="password" class="form-control" id="stripeSecretKey" name="stripeSecretKey" value="••••••••••••••••••••••••••••••">
+                </div>
+                <div class="form-group mb-3">
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="stripeTestMode" name="stripeTestMode" checked>
+                    <label class="custom-control-label" for="stripeTestMode">Test Mode</label>
+                  </div>
+                </div>
+                <div class="form-group mb-3">
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="paypalEnabled" name="paypalEnabled" checked>
+                    <label class="custom-control-label" for="paypalEnabled">Enable PayPal</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Payment Settings</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Maintenance -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">System Maintenance</h6>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h5>Database Backup</h5>
+                <p>Last backup: <strong>March 25, 2025 10:30 AM</strong></p>
+                <button type="button" class="btn btn-primary mb-3">Create New Backup</button>
+              </div>
+              <div class="mb-3">
+                <h5>Maintenance Mode</h5>
+                <p>Put the site in maintenance mode during updates.</p>
+                <div class="custom-control custom-switch mb-3">
+                  <input type="checkbox" class="custom-control-input" id="maintenanceMode">
+                  <label class="custom-control-label" for="maintenanceMode">Enable Maintenance Mode</label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <h5>Clear Cache</h5>
+                <p>Clear application cache to apply recent changes.</p>
+                <button type="button" class="btn btn-warning mb-3">Clear Cache</button>
+              </div>
+              <div>
+                <h5>System Information</h5>
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Node.js Version
+                    <span class="badge bg-primary rounded-pill">16.14.0</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    MongoDB Version
+                    <span class="badge bg-primary rounded-pill">5.0.6</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Express Version
+                    <span class="badge bg-primary rounded-pill">4.17.3</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+

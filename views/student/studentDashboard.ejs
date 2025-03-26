@@ -1,0 +1,337 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Student Portal</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'dashboard' ? 'active' : '' %>" href="/dashboard">
+              <i class="fas fa-user-graduate me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'courses' ? 'active' : '' %>" href="/courses">
+              <i class="fas fa-book me-2"></i>
+              My Courses
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'assignments' ? 'active' : '' %>" href="/assignments">
+              <i class="fas fa-tasks me-2"></i>
+              Assignments
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'grades' ? 'active' : '' %>" href="/grades">
+              <i class="fas fa-chart-line me-2"></i>
+              Grades
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'calendar' ? 'active' : '' %>" href="/calendar">
+              <i class="fas fa-calendar-alt me-2"></i>
+              Calendar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%= activeTab === 'shop' ? 'active' : '' %>" href="/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Campus Shop
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Student Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-download me-1"></i> Export
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-print me-1"></i> Print
+            </button>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <i class="fas fa-calendar me-1"></i> This semester
+          </button>
+        </div>
+      </div>
+
+      <!-- Alert Messages -->
+      <% if (messages && messages.error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= messages.error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+      <% if (messages && messages.success) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= messages.success %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Stats Cards -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Enrolled Courses</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= enrolledCourses.length || 0 %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-book fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    GPA</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= user.gpa || '0.0' %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                    Completed Credits</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= user.completedCredits || 0 %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                    Pending Assignments</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"><%= pendingAssignments || 0 %></div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Announcements -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Announcements</h6>
+          <a href="#" class="btn btn-sm btn-primary">View All</a>
+        </div>
+        <div class="card-body">
+          <% if (announcements && announcements.length > 0) { %>
+            <div class="list-group">
+              <% announcements.forEach(announcement => { %>
+                <div class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">
+                      <% if (announcement.priority === 'high' || announcement.priority === 'urgent') { %>
+                        <span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i></span>
+                      <% } %>
+                      <%= announcement.title %>
+                    </h6>
+                    <small class="text-muted"><%= new Date(announcement.createdAt).toLocaleDateString() %></small>
+                  </div>
+                  <p class="mb-1 text-truncate"><%= announcement.content %></p>
+                  <small>
+                    <% if (announcement.course) { %>
+                      <span class="badge bg-info"><%= announcement.course.code %></span>
+                    <% } else { %>
+                      <span class="badge bg-secondary">General</span>
+                    <% } %>
+                  </small>
+                </div>
+              <% }); %>
+            </div>
+          <% } else { %>
+            <div class="text-center py-4">
+              <i class="fas fa-bullhorn fa-3x text-muted mb-3"></i>
+              <p>No announcements at this time.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Enrolled Courses -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">My Courses</h6>
+              <a href="/courses" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body">
+              <% if (enrolledCourses && enrolledCourses.length > 0) { %>
+                <div class="table-responsive">
+                  <table class="table table-bordered w-100">
+                    <thead>
+                      <tr>
+                        <th scope="col">Course Code</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Schedule</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% enrolledCourses.forEach(course => { %>
+                        <tr>
+                          <td><%= course.code %></td>
+                          <td><%= course.name %></td>
+                          <td><%= course.schedule || 'TBA' %></td>
+                          <td>
+                            <a href="/courses/<%= course._id %>" class="btn btn-sm btn-primary">
+                              <i class="fas fa-eye"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } else { %>
+                <div class="text-center py-4">
+                  <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                  <p>You are not enrolled in any courses.</p>
+                  <a href="/courses/browse" class="btn btn-primary">Browse Courses</a>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Assignments -->
+        <div class="col-md-6">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Upcoming Assignments</h6>
+              <a href="/assignments" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body">
+              <% if (upcomingAssignments && upcomingAssignments.length > 0) { %>
+                <div class="list-group">
+                  <% upcomingAssignments.forEach(assignment => { %>
+                    <a href="/assignments/<%= assignment._id %>" class="list-group-item list-group-item-action">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1"><%= assignment.title %></h6>
+                        <small class="text-danger">
+                          Due: <%= new Date(assignment.dueDate).toLocaleDateString() %>
+                        </small>
+                      </div>
+                      <p class="mb-1"><%= assignment.course ? assignment.course.code : '' %> - <%= assignment.course ? assignment.course.name : '' %></p>
+                      <% 
+                        const now = new Date();
+                        const dueDate = new Date(assignment.dueDate);
+                        const createdDate = new Date(assignment.createdAt);
+                        const totalDays = Math.ceil((dueDate - createdDate) / (1000 * 60 * 60 * 24));
+                        const daysLeft = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
+                        const progress = Math.max(0, Math.min(100, ((totalDays - daysLeft) / totalDays) * 100));
+                        const progressInt = Math.round(progress);
+                      %>
+                      <progress class="w-100" value="<%= progressInt %>" max="100"></progress>
+                      <small><%= daysLeft %> day<%= daysLeft !== 1 ? 's' : '' %> left</small>
+                    </a>
+                  <% }); %>
+                </div>
+              <% } else { %>
+                <div class="text-center py-4">
+                  <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
+                  <p>No upcoming assignments.</p>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Academic Calendar</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-6">
+              <h5>Important Dates</h5>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Registration Deadline
+                  <span class="badge bg-primary rounded-pill">Apr 15, 2025</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Final Exams Begin
+                  <span class="badge bg-primary rounded-pill">May 10, 2025</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Summer Break
+                  <span class="badge bg-primary rounded-pill">Jun 1, 2025</span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-lg-6">
+              <h5>Upcoming Events</h5>
+              <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Career Fair</h6>
+                    <small>Apr 5, 2025</small>
+                  </div>
+                  <p class="mb-1">Meet with potential employers and explore career opportunities.</p>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Spring Festival</h6>
+                    <small>Apr 20, 2025</small>
+                  </div>
+                  <p class="mb-1">Annual campus-wide celebration with food, music, and activities.</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

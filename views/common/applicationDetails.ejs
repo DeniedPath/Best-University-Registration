@@ -1,0 +1,398 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Application Details</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="printBtn">
+              <i class="fas fa-print me-1"></i> Print
+            </button>
+            <a href="/admin/applications" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-arrow-left me-1"></i> Back to List
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Status -->
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="card-title">Application Status</h5>
+                  <p class="card-text">
+                    <% if (application.status === 'pending') { %>
+                      <span class="badge bg-warning text-dark">Pending Review</span>
+                    <% } else if (application.status === 'approved') { %>
+                      <span class="badge bg-success">Approved</span>
+                    <% } else if (application.status === 'rejected') { %>
+                      <span class="badge bg-danger">Rejected</span>
+                    <% } %>
+                    <small class="text-muted ms-2">Submitted on <%= application.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></small>
+                  </p>
+                </div>
+                <% if (application.status === 'pending') { %>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">
+                      <i class="fas fa-check me-1"></i> Approve
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                      <i class="fas fa-times me-1"></i> Reject
+                    </button>
+                  </div>
+                <% } else if (application.isDummy) { %>
+                  <button type="button" class="btn btn-warning reset-btn" data-id="<%= application._id %>">
+                    <i class="fas fa-redo me-1"></i> Reset Status
+                  </button>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Details -->
+      <div class="row">
+        <!-- Personal Information -->
+        <div class="col-md-6 mb-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-user me-2"></i> Personal Information</h5>
+            </div>
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <p class="mb-1 text-muted small">Full Name</p>
+                  <p class="fw-bold"><%= application.firstName %> <%= application.lastName %></p>
+                </div>
+                <div class="col-md-6">
+                  <p class="mb-1 text-muted small">Date of Birth</p>
+                  <p class="fw-bold"><%= new Date(application.dateOfBirth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <p class="mb-1 text-muted small">Email Address</p>
+                  <p class="fw-bold"><%= application.email %></p>
+                </div>
+                <div class="col-md-6">
+                  <p class="mb-1 text-muted small">Phone Number</p>
+                  <p class="fw-bold"><%= application.phone %></p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <p class="mb-1 text-muted small">Address</p>
+                  <p class="fw-bold">
+                    <%= application.address %><br>
+                    <%= application.city %>, <%= application.state %> <%= application.zipCode %><br>
+                    <%= application.country %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Educational Background -->
+        <div class="col-md-6 mb-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i> Educational Background</h5>
+            </div>
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <p class="mb-1 text-muted small">Education Level</p>
+                  <p class="fw-bold"><%= application.educationLevel %></p>
+                </div>
+                <div class="col-md-6">
+                  <p class="mb-1 text-muted small">GPA</p>
+                  <p class="fw-bold"><%= application.gpa.toFixed(1) %> / 4.0</p>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <p class="mb-1 text-muted small">Previous School</p>
+                  <p class="fw-bold"><%= application.previousSchool %></p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <p class="mb-1 text-muted small">Desired Program</p>
+                  <p class="fw-bold"><%= application.desiredProgram %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Statement -->
+        <div class="col-md-12 mb-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-info text-white">
+              <h5 class="mb-0"><i class="fas fa-comment-alt me-2"></i> Personal Statement</h5>
+            </div>
+            <div class="card-body">
+              <p class="card-text"><%= application.personalStatement %></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Documents -->
+        <div class="col-md-12 mb-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-secondary text-white">
+              <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i> Additional Documents</h5>
+            </div>
+            <div class="card-body">
+              <% if (application.isDummy) { %>
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-file-pdf text-danger me-2"></i> Transcript</h5>
+                        <p class="card-text text-muted">transcript_<%= application.lastName.toLowerCase() %>.pdf</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-file-image text-success me-2"></i> ID Photo</h5>
+                        <p class="card-text text-muted">id_photo_<%= application.lastName.toLowerCase() %>.jpg</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-file-word text-primary me-2"></i> Recommendation</h5>
+                        <p class="card-text text-muted">recommendation_<%= application.lastName.toLowerCase() %>.docx</p>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% } else { %>
+                <p class="text-muted">No documents uploaded.</p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Notes -->
+        <div class="col-md-12 mb-4">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-dark text-white">
+              <h5 class="mb-0"><i class="fas fa-sticky-note me-2"></i> Admin Notes</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <textarea class="form-control" id="adminNotes" rows="3" placeholder="Add notes about this application..."></textarea>
+              </div>
+              <button type="button" class="btn btn-primary" id="saveNotesBtn">Save Notes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="approveModalLabel">Approve Application</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to approve the application for <strong><%= application.firstName %> <%= application.lastName %></strong>?</p>
+        <p>This will create a student account and send login credentials to the applicant.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="/admin/applications/<%= application._id %>/approve" method="POST">
+          <button type="submit" class="btn btn-success">Approve</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="rejectModalLabel">Reject Application</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to reject the application for <strong><%= application.firstName %> <%= application.lastName %></strong>?</p>
+        <div class="mb-3">
+          <label for="rejectionReason" class="form-label">Rejection Reason (Optional):</label>
+          <textarea class="form-control" id="rejectionReason" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="/admin/applications/<%= application._id %>/reject" method="POST">
+          <input type="hidden" name="reason" id="rejectionReasonInput">
+          <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle print button
+    document.getElementById('printBtn').addEventListener('click', function() {
+      window.print();
+    });
+
+    // Handle rejection reason
+    document.querySelector('#rejectModal form').addEventListener('submit', function() {
+      const reason = document.getElementById('rejectionReason').value;
+      document.getElementById('rejectionReasonInput').value = reason;
+    });
+
+    // Handle save notes button
+    document.getElementById('saveNotesBtn').addEventListener('click', function() {
+      const notes = document.getElementById('adminNotes').value;
+      
+      // In a real application, this would send the notes to the server
+      // For now, just show a success message
+      if (notes.trim() !== '') {
+        alert('Notes saved successfully!');
+      } else {
+        alert('Please enter some notes before saving.');
+      }
+    });
+
+    // Handle reset button for dummy data
+    const resetBtn = document.querySelector('.reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        const statusElement = document.querySelector('.card-text .badge');
+        const currentStatus = statusElement.classList.contains('bg-warning') ? 'pending' : 
+                             statusElement.classList.contains('bg-success') ? 'approved' : 'rejected';
+        
+        let newStatus, newBadgeClass, newBadgeText;
+        
+        if (currentStatus === 'pending') {
+          newStatus = 'approved';
+          newBadgeClass = 'bg-success';
+          newBadgeText = 'Approved';
+        } else if (currentStatus === 'approved') {
+          newStatus = 'rejected';
+          newBadgeClass = 'bg-danger';
+          newBadgeText = 'Rejected';
+        } else {
+          newStatus = 'pending';
+          newBadgeClass = 'bg-warning text-dark';
+          newBadgeText = 'Pending Review';
+        }
+        
+        // Update the status badge
+        statusElement.className = `badge ${newBadgeClass}`;
+        statusElement.textContent = newBadgeText;
+        
+        // Show/hide action buttons based on new status
+        const actionButtons = document.querySelector('.btn-group');
+        const resetButton = document.querySelector('.reset-btn');
+        
+        if (newStatus === 'pending') {
+          resetButton.style.display = 'none';
+          const btnGroup = document.createElement('div');
+          btnGroup.className = 'btn-group';
+          btnGroup.innerHTML = `
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">
+              <i class="fas fa-check me-1"></i> Approve
+            </button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">
+              <i class="fas fa-times me-1"></i> Reject
+            </button>
+          `;
+          resetButton.parentNode.appendChild(btnGroup);
+        } else {
+          const existingBtnGroup = document.querySelector('.btn-group');
+          if (existingBtnGroup) {
+            existingBtnGroup.remove();
+          }
+          resetButton.style.display = 'block';
+        }
+        
+        alert(`Application status changed to ${newBadgeText}`);
+      });
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

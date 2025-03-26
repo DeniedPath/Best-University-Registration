@@ -1,0 +1,238 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Add New Shop Item</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <a href="/admin/shop" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Shop
+          </a>
+        </div>
+      </div>
+
+      <!-- Flash Messages -->
+      <% if (typeof success_msg !== 'undefined' && success_msg.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= success_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+      
+      <% if (typeof error_msg !== 'undefined' && error_msg.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= error_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Create Shop Item Form -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Item Information</h6>
+        </div>
+        <div class="card-body">
+          <form action="/admin/shop/create" method="POST" class="needs-validation" novalidate>
+            <div class="row g-3">
+              <!-- Basic Information -->
+              <div class="col-md-6">
+                <label for="name" class="form-label">Item Name <span class="text-danger">*</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="name" 
+                  name="name" 
+                  required
+                >
+                <div class="invalid-feedback">
+                  Please enter an item name.
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                <select class="form-select" id="category" name="category" required>
+                  <option value="" selected disabled>Select a category...</option>
+                  <% categories.forEach(category => { %>
+                    <option value="<%= category %>"><%= category %></option>
+                  <% }) %>
+                </select>
+                <div class="invalid-feedback">
+                  Please select a category.
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="price" 
+                    name="price" 
+                    step="0.01" 
+                    min="0.01" 
+                    required
+                  >
+                  <div class="invalid-feedback">
+                    Please enter a valid price.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="inventory" class="form-label">Inventory <span class="text-danger">*</span></label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="inventory" 
+                  name="inventory" 
+                  min="0" 
+                  required
+                >
+                <div class="invalid-feedback">
+                  Please enter a valid inventory amount.
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                <textarea 
+                  class="form-control" 
+                  id="description" 
+                  name="description" 
+                  rows="4" 
+                  required
+                ></textarea>
+                <div class="invalid-feedback">
+                  Please enter a description.
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="imageUrl" class="form-label">Image URL</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="imageUrl" 
+                  name="imageUrl" 
+                  placeholder="/images/default-product.jpg"
+                >
+                <div class="form-text">
+                  Leave blank to use default image.
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-check mt-4">
+                  <input class="form-check-input" type="checkbox" id="featured" name="featured">
+                  <label class="form-check-label" for="featured">
+                    Feature this item on the shop homepage
+                  </label>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-plus me-1"></i> Create Item
+                </button>
+                <a href="/admin/shop" class="btn btn-secondary ms-2">Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  (() => {
+    'use strict'
+    
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll('.needs-validation')
+    
+    // Loop over them and prevent submission
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+  
+  // Image preview
+  document.getElementById('imageUrl').addEventListener('input', function() {
+    const imageUrl = this.value;
+    if (imageUrl) {
+      // If you want to add image preview functionality
+      console.log('Image URL changed:', imageUrl);
+    }
+  });
+</script>
+
+<%- include('../partials/footer') %>
+

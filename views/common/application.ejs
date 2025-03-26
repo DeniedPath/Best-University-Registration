@@ -1,0 +1,222 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-10 offset-lg-1">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h2 class="mb-0">Application for Admission</h2>
+        </div>
+        <div class="card-body p-4">
+          <% if (locals.error) { %>
+            <div class="alert alert-danger">
+              <i class="fas fa-exclamation-circle me-2"></i><%= error %>
+            </div>
+          <% } %>
+          
+          <% if (locals.success) { %>
+            <div class="alert alert-success">
+              <i class="fas fa-check-circle me-2"></i><%= success %>
+            </div>
+          <% } %>
+          
+          <form id="application-form" action="/apply" method="POST" class="needs-validation" novalidate>
+            <!-- Personal Information -->
+            <div class="mb-4">
+              <h4 class="mb-3">Personal Information</h4>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input type="text" class="form-control" id="firstName" name="firstName" required>
+                  <div class="invalid-feedback">First name is required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="middleName" class="form-label">Middle Name (Optional)</label>
+                  <input type="text" class="form-control" id="middleName" name="middleName">
+                </div>
+                <div class="col-md-4">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input type="text" class="form-control" id="lastName" name="lastName" required>
+                  <div class="invalid-feedback">Last name is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                  <div class="invalid-feedback">Please provide a valid email address.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="phone" class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" id="phone" name="phone" required>
+                  <div class="invalid-feedback">Phone number is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+                  <div class="invalid-feedback">Date of birth is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="gender" class="form-label">Gender</label>
+                  <select class="form-select" id="gender" name="gender" required>
+                    <option value="" selected disabled>Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="nonBinary">Non-binary</option>
+                    <option value="preferNotToSay">Prefer not to say</option>
+                  </select>
+                  <div class="invalid-feedback">Please select a gender option.</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Address Information -->
+            <div class="mb-4">
+              <h4 class="mb-3">Address Information</h4>
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label for="streetAddress" class="form-label">Street Address</label>
+                  <input type="text" class="form-control" id="streetAddress" name="address.street" required>
+                  <div class="invalid-feedback">Street address is required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="city" class="form-label">City</label>
+                  <input type="text" class="form-control" id="city" name="address.city" required>
+                  <div class="invalid-feedback">City is required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="state" class="form-label">State/Province</label>
+                  <input type="text" class="form-control" id="state" name="address.state" required>
+                  <div class="invalid-feedback">State/Province is required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="zipCode" class="form-label">Zip/Postal Code</label>
+                  <input type="text" class="form-control" id="zipCode" name="address.zipCode" required>
+                  <div class="invalid-feedback">Zip/Postal code is required.</div>
+                </div>
+                <div class="col-md-12">
+                  <label for="country" class="form-label">Country</label>
+                  <select class="form-select" id="country" name="address.country" required>
+                    <option value="" selected disabled>Select country</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                    <!-- Add more countries as needed -->
+                  </select>
+                  <div class="invalid-feedback">Country is required.</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Educational Background -->
+            <div class="mb-4">
+              <h4 class="mb-3">Educational Background</h4>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="highSchool" class="form-label">High School</label>
+                  <input type="text" class="form-control" id="highSchool" name="education.highSchool" required>
+                  <div class="invalid-feedback">High school name is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="graduationYear" class="form-label">Graduation Year</label>
+                  <input type="number" class="form-control" id="graduationYear" name="education.graduationYear" min="1900" max="2030" required>
+                  <div class="invalid-feedback">Graduation year is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="gpa" class="form-label">GPA</label>
+                  <input type="number" class="form-control" id="gpa" name="education.gpa" min="0" max="4.0" step="0.01" required>
+                  <div class="invalid-feedback">GPA is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="previousCollege" class="form-label">Previous College (if applicable)</label>
+                  <input type="text" class="form-control" id="previousCollege" name="education.previousCollege">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Program Information -->
+            <div class="mb-4">
+              <h4 class="mb-3">Program Information</h4>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="department" class="form-label">Department</label>
+                  <select class="form-select" id="department" name="program.department" required>
+                    <option value="" selected disabled>Select department</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Business">Business</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Sciences">Sciences</option>
+                    <option value="Medicine">Medicine</option>
+                    <option value="Law">Law</option>
+                    <!-- Add more departments as needed -->
+                  </select>
+                  <div class="invalid-feedback">Department is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="degreeType" class="form-label">Degree Type</label>
+                  <select class="form-select" id="degreeType" name="program.degreeType" required>
+                    <option value="" selected disabled>Select degree type</option>
+                    <option value="Associate">Associate's Degree</option>
+                    <option value="Bachelor">Bachelor's Degree</option>
+                    <option value="Master">Master's Degree</option>
+                    <option value="Doctorate">Doctorate</option>
+                    <option value="Certificate">Certificate Program</option>
+                  </select>
+                  <div class="invalid-feedback">Degree type is required.</div>
+                </div>
+                <div class="col-md-12">
+                  <label for="startTerm" class="form-label">Intended Start Term</label>
+                  <select class="form-select" id="startTerm" name="program.startTerm" required>
+                    <option value="" selected disabled>Select start term</option>
+                    <option value="Fall 2025">Fall 2025</option>
+                    <option value="Spring 2026">Spring 2026</option>
+                    <option value="Summer 2026">Summer 2026</option>
+                    <option value="Fall 2026">Fall 2026</option>
+                  </select>
+                  <div class="invalid-feedback">Start term is required.</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Additional Information -->
+            <div class="mb-4">
+              <h4 class="mb-3">Additional Information</h4>
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label for="personalStatement" class="form-label">Personal Statement</label>
+                  <textarea class="form-control" id="personalStatement" name="additionalInfo.personalStatement" rows="5" required></textarea>
+                  <div class="invalid-feedback">Personal statement is required.</div>
+                  <small class="text-muted">Tell us about yourself, your academic goals, and why you want to attend Best University.</small>
+                </div>
+                <div class="col-md-12">
+                  <label for="extracurricular" class="form-label">Extracurricular Activities</label>
+                  <textarea class="form-control" id="extracurricular" name="additionalInfo.extracurricular" rows="3"></textarea>
+                  <small class="text-muted">List any clubs, sports, volunteer work, or other activities you've participated in.</small>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Terms and Conditions -->
+            <div class="mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="termsAgreement" name="termsAgreement" required>
+                <label class="form-check-label" for="termsAgreement">
+                  I certify that all information provided is accurate and complete. I understand that any false or misleading information may result in the rejection of my application or dismissal from the university.
+                </label>
+                <div class="invalid-feedback">You must agree to the terms to submit your application.</div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="reset" class="btn btn-outline-secondary me-md-2">Reset Form</button>
+              <button type="submit" class="btn btn-primary">Submit Application</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+
