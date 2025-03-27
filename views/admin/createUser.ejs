@@ -1,0 +1,292 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Create New User</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <a href="/admin/users" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Users
+          </a>
+        </div>
+      </div>
+
+      <% if (locals.errors && errors.length > 0) { %>
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            <% errors.forEach(error => { %>
+              <li><%= error.msg %></li>
+            <% }); %>
+          </ul>
+        </div>
+      <% } %>
+
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">User Information</h6>
+        </div>
+        <div class="card-body">
+          <form action="/admin/users/create" method="POST" class="needs-validation" novalidate>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" value="<%= locals.formData ? formData.firstName : '' %>" required>
+                <div class="invalid-feedback">
+                  Please provide a first name.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" value="<%= locals.formData ? formData.lastName : '' %>" required>
+                <div class="invalid-feedback">
+                  Please provide a last name.
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" value="<%= locals.formData ? formData.email : '' %>" required>
+                <div class="invalid-feedback">
+                  Please provide a valid email address.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" value="<%= locals.formData ? formData.phone : '' %>">
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="password" name="password" required>
+                  <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">
+                  Please provide a password.
+                </div>
+                <small class="text-muted">Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.</small>
+              </div>
+              <div class="col-md-6">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                  <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">
+                  Please confirm your password.
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="role" class="form-label">User Role</label>
+                <select class="form-select" id="role" name="role" required>
+                  <option value="" selected disabled>Select a role</option>
+                  <option value="admin" <%= locals.formData && formData.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                  <option value="faculty" <%= locals.formData && formData.role === 'faculty' ? 'selected' : '' %>>Faculty</option>
+                  <option value="student" <%= locals.formData && formData.role === 'student' ? 'selected' : '' %>>Student</option>
+                </select>
+                <div class="invalid-feedback">
+                  Please select a user role.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="status" class="form-label">Account Status</label>
+                <select class="form-select" id="status" name="status" required>
+                  <option value="active" <%= !locals.formData || formData.status === 'active' ? 'selected' : '' %>>Active</option>
+                  <option value="inactive" <%= locals.formData && formData.status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="student-fields" style="display: none;">
+              <hr>
+              <h5 class="mb-3">Student Information</h5>
+              
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="studentId" class="form-label">Student ID</label>
+                  <input type="text" class="form-control" id="studentId" name="studentId" value="<%= locals.formData ? formData.studentId : '' %>">
+                </div>
+                <div class="col-md-6">
+                  <label for="program" class="form-label">Program</label>
+                  <select class="form-select" id="program" name="program">
+                    <option value="" selected disabled>Select a program</option>
+                    <option value="computer-science">Computer Science</option>
+                    <option value="business">Business Administration</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="arts">Liberal Arts</option>
+                    <option value="medicine">Medicine</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="faculty-fields" style="display: none;">
+              <hr>
+              <h5 class="mb-3">Faculty Information</h5>
+              
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="facultyId" class="form-label">Faculty ID</label>
+                  <input type="text" class="form-control" id="facultyId" name="facultyId" value="<%= locals.formData ? formData.facultyId : '' %>">
+                </div>
+                <div class="col-md-6">
+                  <label for="department" class="form-label">Department</label>
+                  <select class="form-select" id="department" name="department">
+                    <option value="" selected disabled>Select a department</option>
+                    <option value="computer-science">Computer Science</option>
+                    <option value="business">Business</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="arts">Liberal Arts</option>
+                    <option value="medicine">Medicine</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="title" class="form-label">Title</label>
+                  <select class="form-select" id="title" name="title">
+                    <option value="" selected disabled>Select a title</option>
+                    <option value="professor">Professor</option>
+                    <option value="associate-professor">Associate Professor</option>
+                    <option value="assistant-professor">Assistant Professor</option>
+                    <option value="lecturer">Lecturer</option>
+                    <option value="instructor">Instructor</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="officeLocation" class="form-label">Office Location</label>
+                  <input type="text" class="form-control" id="officeLocation" name="officeLocation" value="<%= locals.formData ? formData.officeLocation : '' %>">
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <button type="reset" class="btn btn-outline-secondary me-md-2">Reset</button>
+              <button type="submit" class="btn btn-primary">Create User</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle password visibility
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.querySelector('i').classList.toggle('fa-eye');
+    this.querySelector('i').classList.toggle('fa-eye-slash');
+  });
+
+  document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    confirmPasswordInput.setAttribute('type', type);
+    this.querySelector('i').classList.toggle('fa-eye');
+    this.querySelector('i').classList.toggle('fa-eye-slash');
+  });
+
+  // Show/hide role-specific fields
+  document.getElementById('role').addEventListener('change', function() {
+    const studentFields = document.querySelector('.student-fields');
+    const facultyFields = document.querySelector('.faculty-fields');
+    
+    if (this.value === 'student') {
+      studentFields.style.display = 'block';
+      facultyFields.style.display = 'none';
+    } else if (this.value === 'faculty') {
+      studentFields.style.display = 'none';
+      facultyFields.style.display = 'block';
+    } else {
+      studentFields.style.display = 'none';
+      facultyFields.style.display = 'none';
+    }
+  });
+
+  // Form validation
+  (function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
+
+<%- include('../partials/footer') %>

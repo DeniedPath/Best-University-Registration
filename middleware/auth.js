@@ -33,7 +33,7 @@ exports.isAdmin = async (req, res, next) => {
   if (req.user.role === 'admin') {
     return next();
   } else {
-    return res.status(403).render('error', { 
+    return res.status(403).render('common/error', { 
       title: 'Access Denied',
       message: 'You do not have permission to access this page.',
       user: req.user
@@ -50,7 +50,7 @@ exports.isFaculty = async (req, res, next) => {
   if (req.user.role === 'faculty' || req.user.role === 'admin') {
     return next();
   } else {
-    return res.status(403).render('error', { 
+    return res.status(403).render('common/error', { 
       title: 'Access Denied',
       message: 'You do not have permission to access this page.',
       user: req.user
@@ -67,7 +67,7 @@ exports.isStudent = async (req, res, next) => {
   if (req.user.role === 'student') {
     return next();
   } else {
-    return res.status(403).render('error', { 
+    return res.status(403).render('common/error', { 
       title: 'Access Denied',
       message: 'You do not have permission to access this page.',
       user: req.user

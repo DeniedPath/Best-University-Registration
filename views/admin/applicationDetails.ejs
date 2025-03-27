@@ -1,0 +1,241 @@
+<%- include('../partials/header') %>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Admin Controls</span>
+        </h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboard">
+              <i class="fas fa-tachometer-alt me-2"></i>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/admin/applications">
+              <i class="fas fa-file-alt me-2"></i>
+              Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/users">
+              <i class="fas fa-users me-2"></i>
+              User Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/courses">
+              <i class="fas fa-book me-2"></i>
+              Course Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/shop">
+              <i class="fas fa-shopping-cart me-2"></i>
+              Shop Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/payments">
+              <i class="fas fa-credit-card me-2"></i>
+              Payment Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/settings">
+              <i class="fas fa-cog me-2"></i>
+              System Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Application Details</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print()">
+              <i class="fas fa-print me-1"></i> Print
+            </button>
+          </div>
+          <a href="/admin/applications" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-arrow-left me-1"></i> Back to Applications
+          </a>
+        </div>
+      </div>
+
+      <% if (application) { %>
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">
+              Application from <%= application.firstName %> <%= application.lastName %>
+            </h6>
+            <div>
+              <% if (application.status === 'pending') { %>
+                <span class="badge bg-warning text-dark">Pending</span>
+              <% } else if (application.status === 'approved') { %>
+                <span class="badge bg-success">Approved</span>
+              <% } else if (application.status === 'rejected') { %>
+                <span class="badge bg-danger">Rejected</span>
+              <% } %>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h5 class="border-bottom pb-2">Personal Information</h5>
+                <div class="mb-3">
+                  <strong>Full Name:</strong> <%= application.firstName %> <%= application.lastName %>
+                </div>
+                <div class="mb-3">
+                  <strong>Email:</strong> <%= application.email %>
+                </div>
+                <div class="mb-3">
+                  <strong>Phone:</strong> <%= application.phone %>
+                </div>
+                <div class="mb-3">
+                  <strong>Date of Birth:</strong> <%= new Date(application.dateOfBirth).toLocaleDateString() %>
+                </div>
+                <div class="mb-3">
+                  <strong>Address:</strong> <%= application.address %>, <%= application.city %>, <%= application.state %> <%= application.zipCode %>, <%= application.country %>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h5 class="border-bottom pb-2">Educational Background</h5>
+                <div class="mb-3">
+                  <strong>Education Level:</strong> <%= application.educationLevel %>
+                </div>
+                <div class="mb-3">
+                  <strong>Previous School:</strong> <%= application.previousSchool %>
+                </div>
+                <div class="mb-3">
+                  <strong>GPA:</strong> <%= application.gpa %>
+                </div>
+                <div class="mb-3">
+                  <strong>Desired Program:</strong> <%= application.program ? application.program.name : 'Not specified' %>
+                </div>
+                <div class="mb-3">
+                  <strong>Applied On:</strong> <%= new Date(application.createdAt).toLocaleDateString() %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <h5 class="border-bottom pb-2">Personal Statement</h5>
+                <p><%= application.personalStatement %></p>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <h5 class="border-bottom pb-2">Documents</h5>
+                <div class="list-group">
+                  <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-file-pdf me-2 text-danger"></i> Transcript.pdf
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-file-pdf me-2 text-danger"></i> RecommendationLetter.pdf
+                  </a>
+                  <a href="#" class="list-group-item list-group-item-action">
+                    <i class="fas fa-file-image me-2 text-primary"></i> ID_Photo.jpg
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <h5 class="border-bottom pb-2">Admin Notes</h5>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" placeholder="Add notes about this application..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="d-flex justify-content-between">
+                  <% if (application.status === 'pending') { %>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">
+                      <i class="fas fa-check me-1"></i> Approve Application
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                      <i class="fas fa-times me-1"></i> Reject Application
+                    </button>
+                  <% } else if (application.status === 'approved' || application.status === 'rejected') { %>
+                    <form action="/admin/applications/<%= application._id %>/reset" method="POST">
+                      <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-undo me-1"></i> Reset Status
+                      </button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Approve Modal -->
+        <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Approve Application</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="/admin/applications/<%= application._id %>/approve" method="POST">
+                <div class="modal-body">
+                  <p>Are you sure you want to approve this application?</p>
+                  <p>This will create a new student account for <%= application.firstName %> <%= application.lastName %>.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-success">Approve</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reject Modal -->
+        <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel">Reject Application</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="/admin/applications/<%= application._id %>/reject" method="POST">
+                <div class="modal-body">
+                  <p>Are you sure you want to reject this application?</p>
+                  <div class="mb-3">
+                    <label for="rejectionReason" class="form-label">Reason for rejection:</label>
+                    <textarea class="form-control" id="rejectionReason" name="rejectionReason" rows="3" required></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-danger">Reject</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="alert alert-danger">
+          Application not found.
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
